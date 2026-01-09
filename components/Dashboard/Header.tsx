@@ -17,12 +17,11 @@ export default function Header() {
                 <h1 className={styles.title}>Xush kelibsiz, {displayName}!</h1>
                 <p className={styles.date}>
                     {(() => {
-                        const monthsUz = [
-                            'Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun',
-                            'Iyul', 'Avgust', 'Sentabr', 'Oktabr', 'Noyabr', 'Dekabr'
-                        ];
                         const d = new Date();
-                        return `${d.getDate()}-${monthsUz[d.getMonth()]}, ${d.getFullYear()}-yil`;
+                        const day = String(d.getDate()).padStart(2, '0');
+                        const month = String(d.getMonth() + 1).padStart(2, '0');
+                        const year = d.getFullYear();
+                        return `${day}.${month}.${year}`;
                     })()}
                 </p>
             </div>

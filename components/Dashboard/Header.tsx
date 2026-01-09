@@ -16,11 +16,14 @@ export default function Header() {
             <div className={styles.welcome}>
                 <h1 className={styles.title}>Xush kelibsiz, {displayName}!</h1>
                 <p className={styles.date}>
-                    {new Date().toLocaleDateString('uz-UZ', {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric'
-                    })} r.
+                    {(() => {
+                        const monthsUz = [
+                            'Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun',
+                            'Iyul', 'Avgust', 'Sentabr', 'Oktabr', 'Noyabr', 'Dekabr'
+                        ];
+                        const d = new Date();
+                        return `${d.getDate()}-${monthsUz[d.getMonth()]}, ${d.getFullYear()}-yil`;
+                    })()}
                 </p>
             </div>
             <div className={styles.userProfile}>

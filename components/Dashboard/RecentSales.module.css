@@ -1,0 +1,62 @@
+.container {
+    padding: 0;
+    overflow: hidden;
+}
+
+.title {
+    padding: 1.5rem 1.5rem 0.5rem;
+    font-size: 1.125rem;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+}
+
+.tableReflow {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.table th {
+    text-align: left;
+    padding: 1rem 1.5rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    border-bottom: 1px solid var(--border);
+    background-color: var(--background);
+}
+
+.table td {
+    padding: 1rem 1.5rem;
+    color: var(--text-main);
+    border-bottom: 1px solid var(--border);
+}
+
+.table tr:last-child td {
+    border-bottom: none;
+}
+
+.product {
+    font-weight: 500;
+}
+
+.time {
+    color: var(--text-secondary);
+}
+
+.amount {
+    font-weight: 600;
+}
+
+.right {
+    text-align: right;
+}
+
+.empty {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 2rem;
+}

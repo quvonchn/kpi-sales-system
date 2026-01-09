@@ -1,0 +1,12 @@
+# Google Sheets Integration
+GOOGLE_SHEET_ID=your_sheet_id_here
+GOOGLE_SHEETS_CREDENTIALS={"type":"service_account","project_id":"your-project","private_key_id":"...","private_key":"...","client_email":"...","client_id":"...","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_x509_cert_url":"..."}
+
+# Qo'llanma:
+# 1. Google Cloud Console ga kiring: https://console.cloud.google.com
+# 2. Yangi project yarating
+# 3. Google Sheets API ni yoqing
+# 4. Service Account yarating va JSON kalitni yuklab oling
+# 5. Yuqoridagi GOOGLE_SHEETS_CREDENTIALS ga JSON ni nusxalang (bir qatorda)
+# 6. Google Sheets faylingizni Service Account email bilan ulashing
+# 7. Sheet ID ni URL dan nusxalang

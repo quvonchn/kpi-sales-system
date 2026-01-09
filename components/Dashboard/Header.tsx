@@ -17,11 +17,10 @@ export default function Header() {
                 <h1 className={styles.title}>Xush kelibsiz, {displayName}!</h1>
                 <p className={styles.date}>
                     {new Date().toLocaleDateString('uz-UZ', {
-                        weekday: 'long',
-                        year: 'numeric',
+                        day: 'numeric',
                         month: 'long',
-                        day: 'numeric'
-                    })}
+                        year: 'numeric'
+                    })} r.
                 </p>
             </div>
             <div className={styles.userProfile}>

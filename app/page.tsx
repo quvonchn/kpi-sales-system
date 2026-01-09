@@ -65,9 +65,10 @@ export default function Home() {
   const currentTotalRevenue = salesData.reduce((sum, sale) => sum + sale.amount, 0);
   const commissionData: CommissionResult = calculateCommission(currentSalesCount, currentTotalRevenue);
 
-  // Hypothetical potential: If they sold a property with 50M commission
-  // Based on current count + 1 big sale.
-  const potentialBigSaleCommission = 50000000;
+  // Hypothetical: If total revenue was 50M
+  const hypotheticalRevenue = 50000000;
+  const activeRate = commissionData.commissionRate > 0 ? commissionData.commissionRate : 0.05;
+  const potentialShare = hypotheticalRevenue * activeRate;
 
 
   const currentRatePercent = (commissionData.commissionRate * 100).toFixed(0) + '%';
@@ -147,7 +148,7 @@ export default function Home() {
 
               <UpsellCard
                 currentCommission={commissionData.commissionAmount}
-                potentialCommission={potentialBigSaleCommission}
+                potentialCommission={potentialShare}
                 formatCurrency={formatCurrency}
               />
             </section>

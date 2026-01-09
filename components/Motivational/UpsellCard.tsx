@@ -16,22 +16,22 @@ export default function UpsellCard({ currentCommission, potentialCommission, for
     return (
         <div className={styles.card}>
             <div className={styles.header}>
-                <span className={styles.icon}>🚀</span>
+                <span className={styles.icon}>💎</span>
                 <div className={styles.titleGroup}>
-                    <h3 className={styles.title}>Katta imkoniyat</h3>
+                    <h3 className={styles.title}>Mahoratni oshiring!</h3>
                     <p className={styles.subtitle}>
-                        Agar qimmatroq obyekt sotsangiz, daromadingiz qanchaga o'sishini ko'ring!
+                        Agar siz ko'proq foyda keltiruvchi uylar sotganingizda edi...
                     </p>
                 </div>
             </div>
 
             <div className={styles.statsContainer}>
                 <div className={styles.statItem}>
-                    <span className={styles.statLabel}>Hozirgi daromad:</span>
+                    <span className={styles.statLabel}>Hozirgi daromadingiz:</span>
                     <span className={styles.statValue}>{formatCurrency(currentCommission)}</span>
                 </div>
                 <div className={styles.statItem}>
-                    <span className={styles.statLabel}>Potensial (Katta savdo):</span>
+                    <span className={styles.statLabel}>Kattaroq natija bilan:</span>
                     <span className={styles.statValueHighlight}>{formatCurrency(potentialCommission)}</span>
                 </div>
             </div>

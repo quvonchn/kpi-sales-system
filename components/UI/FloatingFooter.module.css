@@ -1,0 +1,109 @@
+.wrapper {
+    position: fixed;
+    bottom: 10px;
+    right: 15px;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.advertContainer {
+    background: rgba(30, 41, 59, 0.8);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 6px 14px;
+    border-radius: 99px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    /* Complex looping animation */
+    animation: advertLoop 8s infinite cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: center;
+}
+
+.text {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.65rem;
+    font-weight: 500;
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.name {
+    color: #fbbf24;
+    /* Amber/Gold color for the name */
+    font-weight: 800;
+    margin-left: 2px;
+}
+
+@keyframes advertLoop {
+
+    /* 0%: Start as a tiny point */
+    0% {
+        transform: scale(0) rotate(-180deg);
+        opacity: 0;
+        width: 0;
+        padding: 0;
+    }
+
+    /* 8%: Pop out and expand */
+    8% {
+        transform: scale(1.1) rotate(5deg);
+        opacity: 1;
+        width: auto;
+        padding: 6px 14px;
+    }
+
+    /* 12%: Settle into position */
+    12% {
+        transform: scale(1) rotate(0deg);
+    }
+
+    /* 40%: Slight rotation/pulse (staying visible) */
+    40% {
+        transform: scale(1.05) rotate(2deg);
+    }
+
+    /* 45%: Return to normal */
+    45% {
+        transform: scale(1) rotate(0deg);
+    }
+
+    /* 85%: Stay visible */
+    85% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+
+    /* 92%: Shrink back into a point */
+    92% {
+        transform: scale(0.1) rotate(180deg);
+        opacity: 0;
+    }
+
+    /* 100%: Hidden before restart */
+    100% {
+        transform: scale(0) rotate(180deg);
+        opacity: 0;
+    }
+}
+
+/* Float subtle animation on the whole wrapper */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-3px);
+    }
+}
+
+.wrapper {
+    animation: float 4s ease-in-out infinite;
+}

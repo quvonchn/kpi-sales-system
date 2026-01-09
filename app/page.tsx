@@ -7,6 +7,8 @@ import StatsCard from '@/components/Motivational/StatsCard';
 import ProgressBar from '@/components/Motivational/ProgressBar';
 import RecentSales from '@/components/Dashboard/RecentSales';
 import AuthGuard from '@/components/Auth/AuthGuard';
+import UpsellCard from '@/components/Motivational/UpsellCard';
+
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { calculateCommission, CommissionResult } from '@/utils/commission';
@@ -62,6 +64,11 @@ export default function Home() {
   const currentSalesCount = salesData.length;
   const currentTotalRevenue = salesData.reduce((sum, sale) => sum + sale.amount, 0);
   const commissionData: CommissionResult = calculateCommission(currentSalesCount, currentTotalRevenue);
+
+  // Hypothetical potential: If they sold a property with 50M commission
+  // Based on current count + 1 big sale.
+  const potentialBigSaleCommission = 50000000;
+
 
   const currentRatePercent = (commissionData.commissionRate * 100).toFixed(0) + '%';
   const formatCurrency = (amount: number) => {
@@ -137,6 +144,12 @@ export default function Home() {
                   <p className={styles.progressDesc}>Siz eng yuqori darajadasiz! Ajoyib!</p>
                 </div>
               )}
+
+              <UpsellCard
+                currentCommission={commissionData.commissionAmount}
+                potentialCommission={potentialBigSaleCommission}
+                formatCurrency={formatCurrency}
+              />
             </section>
 
             <section className={styles.contentRow}>

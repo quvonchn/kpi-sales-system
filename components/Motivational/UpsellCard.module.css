@@ -1,0 +1,95 @@
+.card {
+    background: #fff9f0;
+    border: 1px solid #ffedcc;
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+    max-width: 500px;
+    height: 100%;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.icon {
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+.titleGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #b45309;
+}
+
+.subtitle {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #92400e;
+    line-height: 1.4;
+}
+
+.statsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.statItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.statLabel {
+    color: #b45309;
+}
+
+.statValue {
+    font-weight: 700;
+    color: #4b5563;
+}
+
+.statValueHighlight {
+    font-weight: 800;
+    color: #b45309;
+    font-size: 1rem;
+}
+
+.divider {
+    height: 1px;
+    background-color: #ffedcc;
+    margin-bottom: 1rem;
+}
+
+.footer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.footerText {
+    font-size: 0.95rem;
+    color: #b45309;
+}
+
+.motivation {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #f59e0b;
+    font-style: italic;
+}

@@ -20,7 +20,7 @@ export default function ProgressBar({ current, max, label, nextRate, estimatedBo
                 <div className={styles.titleGroup}>
                     <h3 className={styles.title}>Keyingi bosqich</h3>
                     <p className={styles.subtitle}>
-                        Yana <strong>{max - current} ta</strong> savdo qilsangiz, KPI <span className={styles.highlight}>{nextRate}%</span> ga ko'tariladi
+                        Yana <strong>{max - current} ta</strong> savdo qilsangiz, KPI <span className={styles.highlight}>{Math.round(nextRate || 0)}%</span> ga ko'tariladi
                     </p>
                 </div>
             </div>

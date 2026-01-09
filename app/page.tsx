@@ -125,21 +125,18 @@ export default function Home() {
             </div>
 
             <section className={styles.progressSection}>
-              <div className="card">
-                <h3>Keyingi Darajaga O'tish</h3>
-                <p className={styles.progressDesc}>
-                  {commissionData.nextTier ?
-                    `Yana ${commissionData.salesToNextTier} ta sotsangiz ${(commissionData.nextTier.rate * 100)}% komissiyaga erishasiz!`
-                    : "Siz eng yuqori darajadasiz! Ajoyib!"}
-                </p>
-                <div style={{ marginTop: '1rem' }}>
-                  <ProgressBar
-                    current={commissionData.salesCount}
-                    max={commissionData.nextTier ? commissionData.nextTier.min : 30}
-                    label="Keyingi Darajaga"
-                  />
+              {commissionData.nextTier ? (
+                <ProgressBar
+                  current={commissionData.salesCount}
+                  max={commissionData.nextTier.min}
+                  nextRate={commissionData.nextTier.rate * 100}
+                  estimatedBonus={formatCurrency(currentTotalRevenue * commissionData.nextTier.rate)}
+                />
+              ) : (
+                <div className="card">
+                  <p className={styles.progressDesc}>Siz eng yuqori darajadasiz! Ajoyib!</p>
                 </div>
-              </div>
+              )}
             </section>
 
             <section className={styles.contentRow}>

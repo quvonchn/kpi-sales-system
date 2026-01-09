@@ -44,30 +44,33 @@
 
 .summaryCard {
     display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1.5rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 1.25rem;
 }
 
 .cardIcon {
-    font-size: 2.5rem;
+    font-size: 2rem;
+    margin-bottom: 0.25rem;
 }
 
 .summaryCard h3 {
-    font-size: 1.25rem;
-    font-weight: 700;
+    font-size: 1.15rem;
+    font-weight: 800;
     color: var(--text-main);
     margin: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 100%;
+    width: 100%;
+    letter-spacing: -0.02em;
 }
 
 .summaryCard p {
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     color: var(--text-secondary);
-    margin: 0.25rem 0 0;
+    margin: 0;
 }
 
 .tableCard {

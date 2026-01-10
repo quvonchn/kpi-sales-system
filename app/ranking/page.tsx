@@ -18,7 +18,7 @@ interface OperatorStat {
 export default function RankingPage() {
     const [operators, setOperators] = useState<OperatorStat[]>([]);
     const [loading, setLoading] = useState(true);
-    const [sortBy, setSortBy] = useState<'revenue' | 'sales'>('revenue');
+    const [sortBy, setSortBy] = useState<'kpi' | 'sales'>('kpi');
 
     useEffect(() => {
         async function fetchStats() {
@@ -37,7 +37,7 @@ export default function RankingPage() {
     }, []);
 
     const sortedOperators = [...operators].sort((a, b) => {
-        if (sortBy === 'revenue') {
+        if (sortBy === 'kpi') {
             return b.commissionAmount - a.commissionAmount;
         } else {
             return b.salesCount - a.salesCount;
@@ -72,10 +72,10 @@ export default function RankingPage() {
                             <select
                                 id="sort"
                                 value={sortBy}
-                                onChange={(e) => setSortBy(e.target.value as 'revenue' | 'sales')}
+                                onChange={(e) => setSortBy(e.target.value as 'kpi' | 'sales')}
                                 className={styles.select}
                             >
-                                <option value="revenue">KPI summasi bo'yicha</option>
+                                <option value="kpi">KPI summasi bo'yicha</option>
                                 <option value="sales">Sotilgan uy soni bo'yicha</option>
                             </select>
                         </div>
@@ -89,7 +89,7 @@ export default function RankingPage() {
                                         <th>#</th>
                                         <th>Operator</th>
                                         <th>Sotuvlar</th>
-                                        <th>KPI summasi</th>
+                                        <th>{sortBy === 'kpi' ? 'KPI summasi' : 'Sotuv summasi'}</th>
                                         <th>Komissiya %</th>
                                     </tr>
                                 </thead>
@@ -104,7 +104,7 @@ export default function RankingPage() {
                                             </td>
                                             <td className={styles.name}>{op.name}</td>
                                             <td className={styles.sales}>{op.salesCount}</td>
-                                            <td>{formatCurrency(op.commissionAmount)}</td>
+                                            <td>{formatCurrency(sortBy === 'kpi' ? op.commissionAmount : op.totalRevenue)}</td>
                                             <td className={styles.rate}>{(op.commissionRate * 100).toFixed(0)}%</td>
                                         </tr>
                                     ))}

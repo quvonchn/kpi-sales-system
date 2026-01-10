@@ -67,7 +67,11 @@ export async function getTodaySalesFromSheets(operatorName?: string): Promise<Sh
                 const operator = (row[1] || '').toString().toLowerCase().trim();
                 const matchesOperator = !operatorName || operator === operatorName.toLowerCase().trim();
 
-                return isCurrentMonth && matchesOperator;
+                // Status filter (Column G, index 6)
+                const status = (row[6] || '').toString().toLowerCase().trim();
+                const isConfirmed = status === 'tasdiqlandi';
+
+                return isCurrentMonth && matchesOperator && isConfirmed;
             })
             .map((row) => {
                 const salesDate = row[2] || '';

@@ -17,6 +17,8 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    pointer-events: auto;
+    text-decoration: none;
 
     /* Complex looping animation */
     animation: advertLoop 8s infinite cubic-bezier(0.4, 0, 0.2, 1);

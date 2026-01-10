@@ -18,6 +18,7 @@ interface OperatorStat {
 export default function RankingPage() {
     const [operators, setOperators] = useState<OperatorStat[]>([]);
     const [loading, setLoading] = useState(true);
+    const [sortBy, setSortBy] = useState<'revenue' | 'sales'>('revenue');
 
     useEffect(() => {
         async function fetchStats() {
@@ -34,6 +35,14 @@ export default function RankingPage() {
 
         fetchStats();
     }, []);
+
+    const sortedOperators = [...operators].sort((a, b) => {
+        if (sortBy === 'revenue') {
+            return b.totalRevenue - a.totalRevenue;
+        } else {
+            return b.salesCount - a.salesCount;
+        }
+    });
 
     const formatCurrency = (amount: number) => {
         return new Intl.NumberFormat('uz-UZ', {
@@ -54,8 +63,22 @@ export default function RankingPage() {
                 <main className={styles.main}>
                     <Header />
                     <div className={styles.header}>
-                        <h1>Operatorlar Reytingi</h1>
-                        <p>Eng yaxshi natija ko'rsatayotgan hamkasblarimiz</p>
+                        <div>
+                            <h1>Operatorlar Reytingi</h1>
+                            <p>Eng yaxshi natija ko'rsatayotgan hamkasblarimiz</p>
+                        </div>
+                        <div className={styles.filterGroup}>
+                            <label htmlFor="sort">Saralash:</label>
+                            <select
+                                id="sort"
+                                value={sortBy}
+                                onChange={(e) => setSortBy(e.target.value as 'revenue' | 'sales')}
+                                className={styles.select}
+                            >
+                                <option value="revenue">KPI summasi bo'yicha</option>
+                                <option value="sales">Sotilgan uy soni bo'yicha</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div className={`card ${styles.tableCard}`}>
@@ -71,7 +94,7 @@ export default function RankingPage() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {operators.map((op, index) => (
+                                    {sortedOperators.map((op, index) => (
                                         <tr key={op.name}>
                                             <td className={styles.rank}>
                                                 {index === 0 && '🥇'}

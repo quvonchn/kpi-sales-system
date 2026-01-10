@@ -25,6 +25,7 @@ export default function AdminPage() {
     const [operators, setOperators] = useState<OperatorStat[]>([]);
     const [totals, setTotals] = useState<Totals | null>(null);
     const [loading, setLoading] = useState(true);
+    const [sortBy, setSortBy] = useState<'revenue' | 'sales'>('revenue');
     const router = useRouter();
 
     useEffect(() => {
@@ -50,6 +51,14 @@ export default function AdminPage() {
 
         fetchStats();
     }, [router]);
+
+    const sortedOperators = [...operators].sort((a, b) => {
+        if (sortBy === 'revenue') {
+            return b.totalRevenue - a.totalRevenue;
+        } else {
+            return b.salesCount - a.salesCount;
+        }
+    });
 
     const formatCurrency = (amount: number) => {
         return new Intl.NumberFormat('uz-UZ', {
@@ -108,7 +117,21 @@ export default function AdminPage() {
 
                 {/* Operators Table */}
                 <div className={`card ${styles.tableCard}`}>
-                    <h2>Operatorlar Reytingi</h2>
+                    <div className={styles.tableHeader}>
+                        <h2>Operatorlar Reytingi</h2>
+                        <div className={styles.filterGroup}>
+                            <label htmlFor="sort">Saralash:</label>
+                            <select
+                                id="sort"
+                                value={sortBy}
+                                onChange={(e) => setSortBy(e.target.value as 'revenue' | 'sales')}
+                                className={styles.select}
+                            >
+                                <option value="revenue">KPI summasi bo'yicha</option>
+                                <option value="sales">Sotilgan uy soni bo'yicha</option>
+                            </select>
+                        </div>
+                    </div>
                     <div className={styles.tableWrapper}>
                         <table className={styles.table}>
                             <thead>
@@ -123,7 +146,7 @@ export default function AdminPage() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {operators.map((op, index) => (
+                                {sortedOperators.map((op, index) => (
                                     <tr key={op.name}>
                                         <td className={styles.rank}>
                                             {index === 0 && '🥇'}

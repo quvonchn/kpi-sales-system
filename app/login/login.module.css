@@ -7,35 +7,86 @@
     padding: 2rem;
 }
 
-.loginBox {
-    background: var(--surface);
-    border-radius: 1rem;
-    padding: 3rem;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+.house {
+    position: relative;
     max-width: 420px;
     width: 100%;
-    animation: fadeIn 0.5s ease-out;
+    z-index: 10;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.roof {
+    width: 100%;
+    height: 100px;
+    background: var(--primary);
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s;
+    z-index: 2;
+    position: relative;
+}
+
+.body {
+    background: var(--surface);
+    padding: 3rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    border-left: 2px solid var(--primary);
+    border-right: 2px solid var(--primary);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 1;
+}
+
+.base {
+    width: 100%;
+    height: 20px;
+    background: var(--primary-dark);
+    border-radius: 0 0 10px 10px;
+    transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s;
+    z-index: 2;
+    position: relative;
+}
+
+/* Opening Animation Classes */
+.opening .roof {
+    transform: translateY(-200px) rotate(-10deg);
+    opacity: 0;
+}
+
+.opening .base {
+    transform: translateY(200px) rotate(10deg);
+    opacity: 0;
+}
+
+.opening .body {
+    transform: scale(0.8);
+    opacity: 0;
+    filter: blur(10px);
 }
 
 .logo {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
     margin-bottom: 2rem;
     justify-content: center;
 }
 
 .logoIcon {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     background: var(--primary);
-    border-radius: 10px;
+    border-radius: 8px;
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 1.2rem;
+    font-size: 1rem;
+}
+
+.logoIcon svg {
+    width: 24px;
+    height: 24px;
 }
 
 .logo h1 {
@@ -45,17 +96,19 @@
 }
 
 .title {
-    font-size: 1.75rem;
-    font-weight: 700;
+    font-size: 1.5rem;
+    font-weight: 800;
     color: var(--text-main);
     margin-bottom: 0.5rem;
     text-align: center;
+    letter-spacing: -0.5px;
 }
 
 .subtitle {
     color: var(--text-secondary);
     text-align: center;
     margin-bottom: 2rem;
+    font-size: 0.9rem;
 }
 
 .form {
@@ -71,9 +124,9 @@
 }
 
 .inputGroup label {
-    font-weight: 500;
+    font-weight: 600;
     color: var(--text-main);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 }
 
 .inputGroup input {
@@ -89,13 +142,13 @@
 .inputGroup input:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    box-shadow: 0 0 0 3px rgba(0, 168, 142, 0.1);
 }
 
 .error {
     padding: 0.75rem 1rem;
     background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.3);
+    border: 1px solid rgba(239, 68, 68, 0.2);
     border-radius: var(--radius);
     color: #dc2626;
     font-size: 0.875rem;
@@ -109,30 +162,18 @@
     border: none;
     border-radius: var(--radius);
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
 }
 
 .submitBtn:hover:not(:disabled) {
     background: var(--primary-dark);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 168, 142, 0.3);
 }
 
 .submitBtn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }

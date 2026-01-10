@@ -1,11 +1,11 @@
 :root {
-  /* Premium Color Palette */
-  --primary: #2563eb;
-  --primary-dark: #1e3a8a;
-  --primary-light: #60a5fa;
+  /* UYSOT Green Palette */
+  --primary: #00a88e;
+  --primary-dark: #008d77;
+  --primary-light: #33b9a5;
   --secondary: #64748b;
-  --accent: #f59e0b; /* Motivational Gold/Orange */
-  --success: #10b981;
+  --accent: #f59e0b;
+  --success: #00a88e;
   --background: #f8fafc;
   --surface: #ffffff;
   --text-main: #0f172a;
@@ -82,14 +82,29 @@ a {
   justify-content: center;
 }
 
-.text-primary { color: var(--primary); }
-.text-accent { color: var(--accent); }
-.text-success { color: var(--success); }
+.text-primary {
+  color: var(--primary);
+}
+
+.text-accent {
+  color: var(--accent);
+}
+
+.text-success {
+  color: var(--success);
+}
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-fade-in {

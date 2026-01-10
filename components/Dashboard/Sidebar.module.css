@@ -31,10 +31,28 @@
     font-size: 0.9rem;
 }
 
+.logoIcon svg {
+    width: 24px;
+    height: 24px;
+}
+
 .logoText {
-    font-weight: 700;
-    font-size: 1.25rem;
+    font-weight: 800;
+    font-size: 1.4rem;
     color: var(--text-main);
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.kpiTag {
+    background: var(--primary);
+    color: white;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-weight: 700;
 }
 
 .nav {
@@ -60,7 +78,7 @@
 }
 
 .active {
-    background-color: rgba(37, 99, 235, 0.1);
+    background-color: rgba(0, 168, 142, 0.1);
     color: var(--primary);
 }
 

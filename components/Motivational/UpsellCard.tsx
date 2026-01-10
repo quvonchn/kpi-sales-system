@@ -2,16 +2,23 @@ import React from 'react';
 import styles from './UpsellCard.module.css';
 
 interface UpsellCardProps {
+    currentSalesCount: number;
+    currentTotalRevenue: number;
     currentCommission: number;
     potentialCommission: number;
     formatCurrency: (amount: number) => string;
 }
 
-export default function UpsellCard({ currentCommission, potentialCommission, formatCurrency }: UpsellCardProps) {
+export default function UpsellCard({
+    currentSalesCount,
+    currentTotalRevenue,
+    currentCommission,
+    potentialCommission,
+    formatCurrency
+}: UpsellCardProps) {
     const diff = potentialCommission - currentCommission;
-
-    // If current is already higher (unlikely in this context), don't show negative
-    const displayDiff = diff > 0 ? diff : 0;
+    const hypotheticalTotal = currentTotalRevenue * 3;
+    const displayDiff = potentialCommission - currentCommission > 0 ? potentialCommission - currentCommission : 0;
 
     return (
         <div className={styles.card}>
@@ -20,7 +27,7 @@ export default function UpsellCard({ currentCommission, potentialCommission, for
                 <div className={styles.titleGroup}>
                     <h3 className={styles.title}>Mahoratni oshiring!</h3>
                     <p className={styles.subtitle}>
-                        Agar siz ko'proq foyda keltiruvchi uylar sotganingizda edi...
+                        Agar siz {currentSalesCount} ta qimmatroq uyni sotishingiz hisobiga {formatCurrency(hypotheticalTotal)} komissiya miqdori bo'lardi va sizning daromadingiz {formatCurrency(potentialCommission)} bo'lardi
                     </p>
                 </div>
             </div>

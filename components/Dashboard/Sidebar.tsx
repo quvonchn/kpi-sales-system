@@ -34,6 +34,9 @@ export default function Sidebar() {
                 <Link href="/history" className={`${styles.navItem} ${pathname === '/history' ? styles.active : ''}`}>
                     <span>📜 Sotuv Tarixi</span>
                 </Link>
+                <Link href="/ranking" className={`${styles.navItem} ${pathname === '/ranking' ? styles.active : ''}`}>
+                    <span>🏆 Reyting</span>
+                </Link>
                 <Link href="/profile" className={`${styles.navItem} ${pathname === '/profile' ? styles.active : ''}`}>
                     <span>👤 Profil</span>
                 </Link>

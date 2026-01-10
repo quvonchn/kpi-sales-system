@@ -1,0 +1,108 @@
+.layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--background);
+}
+
+.main {
+    margin-left: 260px;
+    flex: 1;
+    padding: 2rem;
+    max-width: 1400px;
+}
+
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+}
+
+.header {
+    margin-bottom: 2rem;
+}
+
+.header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+}
+
+.header p {
+    color: var(--text-secondary);
+}
+
+.tableCard {
+    padding: 0;
+    overflow: hidden;
+}
+
+.tableWrapper {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.table th {
+    text-align: left;
+    padding: 1rem 1.5rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+    border-bottom: 2px solid var(--border);
+    background-color: var(--background);
+}
+
+.table td {
+    padding: 1rem 1.5rem;
+    color: var(--text-main);
+    border-bottom: 1px solid var(--border);
+}
+
+.table tr:last-child td {
+    border-bottom: none;
+}
+
+.table tbody tr:hover {
+    background-color: var(--background);
+}
+
+.rank {
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-align: center;
+    width: 60px;
+}
+
+.name {
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.sales {
+    font-weight: 600;
+}
+
+.rate {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.empty {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 3rem;
+}
+
+@media (max-width: 768px) {
+    .main {
+        margin-left: 0;
+        padding: 1rem;
+    }
+}

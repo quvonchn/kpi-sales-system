@@ -75,7 +75,12 @@ export async function getTodaySalesFromSheets(operatorName?: string): Promise<Sh
 
                 const time = salesDate.includes(' ')
                     ? salesDate.split(' ')[1]
-                    : new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+                    : new Date().toLocaleTimeString('uz-UZ', {
+                        timeZone: 'Asia/Tashkent',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false
+                    });
 
                 const commissionAmount = parseFloat(commission.toString().replace(/[^0-9.-]/g, '') || '0');
 

@@ -8,6 +8,7 @@ import ProgressBar from '@/components/Motivational/ProgressBar';
 import RecentSales from '@/components/Dashboard/RecentSales';
 import AuthGuard from '@/components/Auth/AuthGuard';
 import UpsellCard from '@/components/Motivational/UpsellCard';
+import DeveloperPieChart from '@/components/Dashboard/DeveloperPieChart';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -18,6 +19,7 @@ interface Sale {
   amount: number;
   product: string;
   time: string;
+  quruvchi: string;
 }
 
 export default function Home() {
@@ -62,13 +64,18 @@ export default function Home() {
   }, [router]);
 
   const currentSalesCount = salesData.length;
-  const currentTotalRevenue = salesData.reduce((sum, sale) => sum + sale.amount, 0);
+  const currentTotalRevenue = salesData.reduce((sum, sale) => sum + sale.amount, 0); // This is jami komissiya from sheet
   const commissionData: CommissionResult = calculateCommission(currentSalesCount, currentTotalRevenue);
 
-  // Hypothetical: If total revenue was 50M
-  const hypotheticalRevenue = 50000000;
-  const activeRate = commissionData.commissionRate > 0 ? commissionData.commissionRate : 0.05;
-  const potentialShare = hypotheticalRevenue * activeRate;
+  // New logic for estimated bonus (Image 4)
+  const averageCommission = currentSalesCount > 0 ? currentTotalRevenue / currentSalesCount : 0;
+  const nextTierMin = commissionData.nextTier?.min || 0;
+  const nextTierRate = commissionData.nextTier?.rate || 0;
+  const nextTierEstimatedBonus = (averageCommission * nextTierMin) * nextTierRate;
+
+  // New logic for Upsell (Image 5)
+  const hypotheticalTotalRevenue = currentTotalRevenue * 3;
+  const potentialShare = hypotheticalTotalRevenue * commissionData.commissionRate;
 
 
   const currentRatePercent = (commissionData.commissionRate * 100).toFixed(0) + '%';
@@ -112,23 +119,22 @@ export default function Home() {
               <StatsCard
                 title="Komissiya Foizi"
                 value={currentRatePercent}
-                subtitle={`Keyingi Daraja: ${(commissionData.nextTier?.rate || 0) * 100}%`}
+                subtitle={`Keyingi Daraja: ${((commissionData.nextTier?.rate || 0) * 100).toFixed(0)}%`}
                 icon="📈"
                 color="accent"
                 trend={commissionData.commissionRate > 0.05 ? "Yuqori!" : "Standart"}
               />
               <StatsCard
-                title="Jami Sotuv"
+                title="Jami komissiya"
                 value={formatCurrency(commissionData.totalRevenue)}
                 icon="💰"
                 color="success"
               />
               <StatsCard
-                title="Sizning Komissiyangiz"
+                title="Sizning KPI summangiz"
                 value={formatCurrency(commissionData.commissionAmount)}
                 icon="💵"
                 color="success"
-                subtitle="Taxminiy daromad"
               />
             </div>
 
@@ -138,7 +144,7 @@ export default function Home() {
                   current={commissionData.salesCount}
                   max={commissionData.nextTier.min}
                   nextRate={commissionData.nextTier.rate * 100}
-                  estimatedBonus={formatCurrency(currentTotalRevenue * commissionData.nextTier.rate)}
+                  estimatedBonus={formatCurrency(nextTierEstimatedBonus)}
                 />
               ) : (
                 <div className="card">
@@ -147,6 +153,8 @@ export default function Home() {
               )}
 
               <UpsellCard
+                currentSalesCount={currentSalesCount}
+                currentTotalRevenue={currentTotalRevenue}
                 currentCommission={commissionData.commissionAmount}
                 potentialCommission={potentialShare}
                 formatCurrency={formatCurrency}
@@ -155,6 +163,7 @@ export default function Home() {
 
             <section className={styles.contentRow}>
               <RecentSales sales={salesData} />
+              <DeveloperPieChart sales={salesData} />
             </section>
           </div>
         </main>

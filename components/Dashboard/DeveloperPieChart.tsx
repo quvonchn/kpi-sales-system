@@ -12,6 +12,29 @@ interface DeveloperPieChartProps {
 }
 
 export default function DeveloperPieChart({ sales }: DeveloperPieChartProps) {
+    const [isVisible, setIsVisible] = React.useState(false);
+    const chartRef = React.useRef<HTMLDivElement>(null);
+
+    React.useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                // Only trigger if 100% visible
+                if (entry.intersectionRatio >= 1.0) {
+                    setIsVisible(true);
+                }
+            },
+            {
+                threshold: [0, 0.5, 1.0]
+            }
+        );
+
+        if (chartRef.current) {
+            observer.observe(chartRef.current);
+        }
+
+        return () => observer.disconnect();
+    }, []);
+
     if (!sales || sales.length === 0) return null;
 
     // Process data
@@ -40,11 +63,11 @@ export default function DeveloperPieChart({ sales }: DeveloperPieChartProps) {
     ];
 
     return (
-        <div className={`card ${styles.container}`}>
+        <div ref={chartRef} className={`card ${styles.container}`}>
             <h3 className={styles.title}>Quruvchilar ulushi</h3>
             <div className={styles.content}>
                 <div className={styles.chartWrapper}>
-                    <svg viewBox="0 0 36 36" className={styles.circularChart}>
+                    <svg viewBox="0 0 36 36" className={`${styles.circularChart} ${isVisible ? styles.animate : ''}`}>
                         {data.map((item, index) => {
                             let offset = 0;
                             for (let i = 0; i < index; i++) {
@@ -54,7 +77,7 @@ export default function DeveloperPieChart({ sales }: DeveloperPieChartProps) {
                                 <path
                                     key={item.name}
                                     className={styles.circle}
-                                    strokeDasharray={`${item.percent} 100`}
+                                    strokeDasharray={`${isVisible ? item.percent : 0} 100`}
                                     strokeDashoffset={-offset}
                                     stroke={colors[index % colors.length]}
                                     d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"

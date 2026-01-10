@@ -1,11 +1,11 @@
 :root {
-  /* UYSOT Green Palette */
-  --primary: #00a88e;
-  --primary-dark: #008d77;
-  --primary-light: #33b9a5;
+  /* Official UYSOT Palette */
+  --primary: #00A389;
+  --primary-dark: #008D76;
+  --primary-light: #26BBA4;
   --secondary: #64748b;
-  --accent: #f59e0b;
-  --success: #00a88e;
+  --accent: #FFAB55;
+  --success: #00A389;
   --background: #f8fafc;
   --surface: #ffffff;
   --text-main: #0f172a;

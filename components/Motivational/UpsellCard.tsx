@@ -26,9 +26,6 @@ export default function UpsellCard({
                 <span className={styles.icon}>💎</span>
                 <div className={styles.titleGroup}>
                     <h3 className={styles.title}>Mahoratni oshiring!</h3>
-                    <p className={styles.subtitle}>
-                        Agar siz {currentSalesCount} ta qimmatroq uyni sotishingiz hisobiga {formatCurrency(hypotheticalTotal)} komissiya miqdori bo'lardi va sizning daromadingiz {formatCurrency(potentialCommission)} bo'lardi
-                    </p>
                 </div>
             </div>
 
@@ -38,7 +35,7 @@ export default function UpsellCard({
                     <span className={styles.statValue}>{formatCurrency(currentCommission)}</span>
                 </div>
                 <div className={styles.statItem}>
-                    <span className={styles.statLabel}>Kattaroq natija bilan:</span>
+                    <span className={styles.statLabel}>Agar siz 50% qimmatroq uy sotganingizda:</span>
                     <span className={styles.statValueHighlight}>{formatCurrency(potentialCommission)}</span>
                 </div>
             </div>

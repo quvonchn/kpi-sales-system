@@ -74,7 +74,7 @@ export default function Home() {
   const nextTierEstimatedBonus = (averageCommission * nextTierMin) * nextTierRate;
 
   // New logic for Upsell (Image 5)
-  const hypotheticalTotalRevenue = currentTotalRevenue * 3;
+  const hypotheticalTotalRevenue = currentTotalRevenue * 1.5;
   const potentialShare = hypotheticalTotalRevenue * commissionData.commissionRate;
 
 

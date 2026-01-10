@@ -103,7 +103,7 @@ export default function DeveloperPieChart({ sales }: DeveloperPieChartProps) {
                 <div className={styles.motivationBox}>
                     <p className={styles.motivationText}>
                         Siz eng ko'p <strong>"{topDeveloper.name}"</strong> quruvchiga tegishli uylarni sotyabsiz.
-                        Agar siz boshqa quruvchiga tegishli qimmatroq uylarni ko'proq sotsangiz daromadingiz o'shishi aniq. 🚀
+                        Agar siz boshqa quruvchiga tegishli qimmatroq uylarni ko'proq sotsangiz daromadingiz o'sishi aniq. 🚀
                     </p>
                 </div>
             )}

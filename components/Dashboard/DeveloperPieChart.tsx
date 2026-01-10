@@ -65,7 +65,7 @@ export default function DeveloperPieChart({ sales }: DeveloperPieChartProps) {
     const topDeveloper = data.length > 0 ? data[0] : null;
 
     return (
-        <div ref={chartRef} className={`card ${styles.container}`}>
+        <div ref={chartRef} className={`card ${styles.container} ${isVisible ? styles.animate : ''}`}>
             <h3 className={styles.title}>Quruvchilar ulushi</h3>
             <div className={styles.content}>
                 <div className={styles.chartWrapper}>

@@ -62,6 +62,8 @@ export default function DeveloperPieChart({ sales }: DeveloperPieChartProps) {
         '#ec4899'  // Pink
     ];
 
+    const topDeveloper = data.length > 0 ? data[0] : null;
+
     return (
         <div ref={chartRef} className={`card ${styles.container}`}>
             <h3 className={styles.title}>Quruvchilar ulushi</h3>
@@ -96,6 +98,15 @@ export default function DeveloperPieChart({ sales }: DeveloperPieChartProps) {
                     ))}
                 </div>
             </div>
+
+            {topDeveloper && (
+                <div className={styles.motivationBox}>
+                    <p className={styles.motivationText}>
+                        Siz eng ko'p <strong>"{topDeveloper.name}"</strong> quruvchiga tegishli uylarni sotyabsiz.
+                        Agar siz boshqa quruvchiga tegishli qimmatroq uylarni ko'proq sotsangiz daromadingiz o'shishi aniq. 🚀
+                    </p>
+                </div>
+            )}
         </div>
     );
 }

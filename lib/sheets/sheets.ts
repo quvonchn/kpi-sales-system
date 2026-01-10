@@ -77,14 +77,9 @@ export async function getTodaySalesFromSheets(operatorName?: string): Promise<Sh
                 const salesDate = row[2] || '';
                 const commission = row[3] || '0';
 
-                const time = salesDate.includes(' ')
-                    ? salesDate.split(' ')[1]
-                    : new Date().toLocaleTimeString('uz-UZ', {
-                        timeZone: 'Asia/Tashkent',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: false
-                    });
+                const displayDate = salesDate.includes(' ')
+                    ? salesDate.split(' ')[0]
+                    : salesDate;
 
                 const commissionAmount = parseFloat(commission.toString().replace(/[^0-9.-]/g, '') || '0');
 
@@ -98,7 +93,7 @@ export async function getTodaySalesFromSheets(operatorName?: string): Promise<Sh
                     status: (row[6] || '').toString(),
                     amount: commissionAmount,
                     product: (row[5] || 'Unknown Object').toString(),
-                    time: time.toString(),
+                    time: displayDate.toString(),
                 };
             });
 

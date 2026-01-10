@@ -21,7 +21,7 @@ export default function RecentSales({ sales }: RecentSalesProps) {
                     <thead>
                         <tr>
                             <th>Obyekt</th>
-                            <th>Vaqt</th>
+                            <th>Sana</th>
                             <th className={styles.right}>Summa</th>
                         </tr>
                     </thead>

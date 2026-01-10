@@ -17,7 +17,7 @@ export async function getOperators(): Promise<Operator[]> {
 
         const auth = new google.auth.GoogleAuth({
             credentials,
-            scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
+            scopes: ['https://www.googleapis.com/auth/spreadsheets'], // Changed to allow writing
         });
 
         const sheets = google.sheets({ version: 'v4', auth });
@@ -54,4 +54,54 @@ export async function validateOperator(name: string, password: string): Promise<
         op.name.toLowerCase() === targetName &&
         op.password === targetPassword
     );
+}
+
+export async function updateOperatorPassword(name: string, newPassword: string): Promise<boolean> {
+    if (!process.env.GOOGLE_SHEETS_CREDENTIALS || !process.env.GOOGLE_SHEET_ID) {
+        return false;
+    }
+
+    try {
+        const credentials = JSON.parse(process.env.GOOGLE_SHEETS_CREDENTIALS);
+        const auth = new google.auth.GoogleAuth({
+            credentials,
+            scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+        });
+        const sheets = google.sheets({ version: 'v4', auth });
+
+        // 1. Find the row index for the operator
+        const response = await sheets.spreadsheets.values.get({
+            spreadsheetId: process.env.GOOGLE_SHEET_ID,
+            range: 'Лист2!A1:A', // Read only column A
+        });
+
+        const rows = response.data.values || [];
+        const rowIndex = rows.findIndex(row =>
+            row[0]?.toString().toLowerCase().trim() === name.toLowerCase().trim()
+        );
+
+        if (rowIndex === -1) {
+            console.error(`Operator ${name} not found in sheet`);
+            return false;
+        }
+
+        // 2. Update the password cell (Column B = index 1)
+        // In Google Sheets API, range is 1-indexed, but rowIndex from findIndex is 0-indexed.
+        // So cell is B[rowIndex + 1]. 
+        const range = `Лист2!B${rowIndex + 1}`;
+
+        await sheets.spreadsheets.values.update({
+            spreadsheetId: process.env.GOOGLE_SHEET_ID,
+            range,
+            valueInputOption: 'RAW',
+            requestBody: {
+                values: [[newPassword]],
+            },
+        });
+
+        return true;
+    } catch (error) {
+        console.error("Error updating operator password:", error);
+        return false;
+    }
 }

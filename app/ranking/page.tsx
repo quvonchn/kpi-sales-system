@@ -38,7 +38,7 @@ export default function RankingPage() {
 
     const sortedOperators = [...operators].sort((a, b) => {
         if (sortBy === 'revenue') {
-            return b.totalRevenue - a.totalRevenue;
+            return b.commissionAmount - a.commissionAmount;
         } else {
             return b.salesCount - a.salesCount;
         }
@@ -89,7 +89,7 @@ export default function RankingPage() {
                                         <th>#</th>
                                         <th>Operator</th>
                                         <th>Sotuvlar</th>
-                                        <th>Daromad</th>
+                                        <th>KPI summasi</th>
                                         <th>Komissiya %</th>
                                     </tr>
                                 </thead>
@@ -104,7 +104,7 @@ export default function RankingPage() {
                                             </td>
                                             <td className={styles.name}>{op.name}</td>
                                             <td className={styles.sales}>{op.salesCount}</td>
-                                            <td>{formatCurrency(op.totalRevenue)}</td>
+                                            <td>{formatCurrency(op.commissionAmount)}</td>
                                             <td className={styles.rate}>{(op.commissionRate * 100).toFixed(0)}%</td>
                                         </tr>
                                     ))}

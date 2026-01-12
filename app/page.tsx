@@ -8,7 +8,8 @@ import ProgressBar from '@/components/Motivational/ProgressBar';
 import RecentSales from '@/components/Dashboard/RecentSales';
 import AuthGuard from '@/components/Auth/AuthGuard';
 import UpsellCard from '@/components/Motivational/UpsellCard';
-import DeveloperPieChart from '@/components/Dashboard/DeveloperPieChart';
+import StatusPieChart from '@/components/Dashboard/StatusPieChart';
+import DeveloperPieChart from '@/components/Dashboard/DeveloperPieChart'; // Keeping for reference if needed elsewhere
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -20,12 +21,14 @@ interface Sale {
   product: string;
   time: string;
   quruvchi: string;
+  status: string;
 }
 
 export default function Home() {
   const [salesData, setSalesData] = useState<Sale[]>([]);
   const [loading, setLoading] = useState(true);
   const [isUsingMock, setIsUsingMock] = useState(false);
+  const [statusFilter, setStatusFilter] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -63,8 +66,10 @@ export default function Home() {
     fetchData();
   }, [router]);
 
-  const currentSalesCount = salesData.length;
-  const currentTotalRevenue = salesData.reduce((sum, sale) => sum + sale.amount, 0); // This is jami komissiya from sheet
+  // KPI calculations MUST use only 'tasdiqlandi' sales
+  const confirmedSales = salesData.filter(s => s.status === 'tasdiqlandi');
+  const currentSalesCount = confirmedSales.length;
+  const currentTotalRevenue = confirmedSales.reduce((sum, sale) => sum + sale.amount, 0);
   const commissionData: CommissionResult = calculateCommission(currentSalesCount, currentTotalRevenue);
 
   // New logic for estimated bonus (Image 4)
@@ -77,6 +82,10 @@ export default function Home() {
   const hypotheticalTotalRevenue = currentTotalRevenue * 1.5;
   const potentialShare = hypotheticalTotalRevenue * commissionData.commissionRate;
 
+  // Filtered sales for display in RecentSales
+  const displayedSales = statusFilter
+    ? salesData.filter(s => s.status === statusFilter)
+    : salesData;
 
   const currentRatePercent = (commissionData.commissionRate * 100).toFixed(0) + '%';
   const formatCurrency = (amount: number) => {
@@ -162,7 +171,11 @@ export default function Home() {
             </section>
 
             <section className={styles.contentRow}>
-              <RecentSales sales={salesData} />
+              <RecentSales
+                sales={salesData}
+                activeFilter={null}
+                hideBuilder={true}
+              />
               <DeveloperPieChart sales={salesData} />
             </section>
           </div>

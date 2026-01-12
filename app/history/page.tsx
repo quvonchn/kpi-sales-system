@@ -6,10 +6,21 @@ import Sidebar from '@/components/Dashboard/Sidebar';
 import Header from '@/components/Dashboard/Header';
 import AuthGuard from '@/components/Auth/AuthGuard';
 import RecentSales from '@/components/Dashboard/RecentSales';
+import StatusPieChart from '@/components/Dashboard/StatusPieChart';
+
+interface Sale {
+    id: string;
+    amount: number;
+    product: string;
+    time: string;
+    quruvchi: string;
+    status: string;
+}
 
 export default function HistoryPage() {
-    const [sales, setSales] = useState([]);
+    const [sales, setSales] = useState<Sale[]>([]);
     const [loading, setLoading] = useState(true);
+    const [statusFilter, setStatusFilter] = useState<string | null>(null);
 
     useEffect(() => {
         async function fetchData() {
@@ -27,16 +38,39 @@ export default function HistoryPage() {
         fetchData();
     }, []);
 
+    const displayedSales = statusFilter
+        ? sales.filter(s => s.status === statusFilter)
+        : sales;
+
+    if (loading) {
+        return <div style={{ padding: '2rem', textAlign: 'center' }}>Yuklanmoqda...</div>;
+    }
+
     return (
         <AuthGuard>
             <div className={styles.layout}>
                 <Sidebar />
                 <main className={styles.main}>
                     <Header />
-                    <div className="card" style={{ marginTop: '2rem' }}>
-                        <h2>Sotuvlar Tarixi</h2>
-                        <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>Barcha amalga oshirilgan sotuvlar ro'yxati</p>
-                        <RecentSales sales={sales} />
+
+                    <div className={styles.dashboardGrid}>
+                        <div className={styles.pageTitle}>
+                            <h1>Sotuvlar Tarixi</h1>
+                            <p>Barcha amalga oshirilgan sotuvlar ro'yxati</p>
+                        </div>
+
+                        <section className={styles.contentRow}>
+                            <RecentSales
+                                sales={displayedSales}
+                                activeFilter={statusFilter}
+                                hideBuilder={false}
+                            />
+                            <StatusPieChart
+                                sales={sales}
+                                onFilterChange={setStatusFilter}
+                                activeFilter={statusFilter}
+                            />
+                        </section>
                     </div>
                 </main>
             </div>

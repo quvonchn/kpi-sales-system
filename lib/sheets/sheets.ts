@@ -67,11 +67,7 @@ export async function getTodaySalesFromSheets(operatorName?: string): Promise<Sh
                 const operator = (row[1] || '').toString().toLowerCase().trim();
                 const matchesOperator = !operatorName || operator === operatorName.toLowerCase().trim();
 
-                // Status filter (Column G, index 6)
-                const status = (row[6] || '').toString().toLowerCase().trim();
-                const isConfirmed = status === 'tasdiqlandi';
-
-                return isCurrentMonth && matchesOperator && isConfirmed;
+                return isCurrentMonth && matchesOperator;
             })
             .map((row) => {
                 const salesDate = row[2] || '';
@@ -90,7 +86,7 @@ export async function getTodaySalesFromSheets(operatorName?: string): Promise<Sh
                     commission: commission.toString(),
                     quruvchi: (row[4] || '').toString(),
                     obyekt: (row[5] || 'Unknown Object').toString(),
-                    status: (row[6] || '').toString(),
+                    status: (row[6] || '').toString().toLowerCase().trim(),
                     amount: commissionAmount,
                     product: (row[5] || 'Unknown Object').toString(),
                     time: displayDate.toString(),

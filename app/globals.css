@@ -64,16 +64,29 @@ a {
 /* Utilities */
 .card {
   background: var(--surface);
-  border-radius: var(--radius);
+  border-radius: 1.25rem;
   border: 1px solid var(--border);
   box-shadow: var(--shadow-md);
   padding: 1.5rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
 }
 
 .card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .flex-center {

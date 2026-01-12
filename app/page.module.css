@@ -12,6 +12,22 @@
   max-width: 1400px;
 }
 
+.pageTitle {
+  margin-bottom: 0.5rem;
+}
+
+.pageTitle h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.25rem;
+}
+
+.pageTitle p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
 .dashboardGrid {
   display: flex;
   flex-direction: column;

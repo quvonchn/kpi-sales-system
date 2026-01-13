@@ -9,7 +9,9 @@ export async function GET(request: NextRequest) {
 
         const operatorStats = await Promise.all(
             operators.map(async (op) => {
-                const sales = await getTodaySalesFromSheets(op.name);
+                const allSales = await getTodaySalesFromSheets(op.name);
+                // Faqat "Tasdiqlandi" statusli sotuvlarni hisoblash
+                const sales = allSales.filter(sale => sale.status === 'tasdiqlandi');
                 const totalRevenue = sales.reduce((sum, sale) => sum + sale.amount, 0);
                 const commission = calculateCommission(sales.length, totalRevenue);
 

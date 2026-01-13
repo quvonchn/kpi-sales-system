@@ -11,6 +11,13 @@
     max-width: 1400px;
 }
 
+@media (max-width: 768px) {
+    .main {
+        margin-left: 0;
+        padding: 1rem;
+    }
+}
+
 .loading {
     display: flex;
     align-items: center;

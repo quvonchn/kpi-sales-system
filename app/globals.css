@@ -123,3 +123,25 @@ a {
 .animate-fade-in {
   animation: fadeIn 0.5s ease-out forwards;
 }
+/* Responsive Utility Classes */
+.hide-on-mobile {
+  display: block;
+}
+
+.show-on-mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .hide-on-mobile {
+    display: none !important;
+  }
+
+  .show-on-mobile {
+    display: block !important;
+  }
+
+  .container {
+    padding: 1rem;
+  }
+}

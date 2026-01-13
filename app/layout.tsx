@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 };
 
 import FloatingFooter from '@/components/UI/FloatingFooter';
+import { SidebarProvider } from '@/context/SidebarContext';
 
 export default function RootLayout({
   children,
@@ -19,8 +20,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        {children}
-        <FloatingFooter />
+        <SidebarProvider>
+          {children}
+          <FloatingFooter />
+        </SidebarProvider>
       </body>
     </html>
   );

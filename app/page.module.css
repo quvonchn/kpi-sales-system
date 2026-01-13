@@ -12,6 +12,13 @@
   max-width: 1400px;
 }
 
+@media (max-width: 768px) {
+  .main {
+    margin-left: 0;
+    padding: 1rem;
+  }
+}
+
 .pageTitle {
   margin-bottom: 0.5rem;
 }

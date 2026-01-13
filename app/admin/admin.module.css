@@ -188,3 +188,9 @@
     color: var(--text-secondary);
     padding: 3rem;
 }
+@media (max-width: 768px) {
+    .main {
+        margin-left: 0;
+        padding: 1rem;
+    }
+}

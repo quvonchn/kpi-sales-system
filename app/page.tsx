@@ -126,20 +126,6 @@ export default function Home() {
                 color="primary"
               />
               <StatsCard
-                title="Komissiya Foizi"
-                value={currentRatePercent}
-                subtitle={`Keyingi Daraja: ${((commissionData.nextTier?.rate || 0) * 100).toFixed(0)}%`}
-                icon="📈"
-                color="accent"
-                trend={commissionData.commissionRate > 0.05 ? "Yuqori!" : "Standart"}
-              />
-              <StatsCard
-                title="Jami komissiya"
-                value={formatCurrency(commissionData.totalRevenue)}
-                icon="💰"
-                color="success"
-              />
-              <StatsCard
                 title="Sizning KPI summangiz"
                 value={formatCurrency(commissionData.commissionAmount)}
                 icon="💵"
@@ -175,6 +161,7 @@ export default function Home() {
                 sales={salesData}
                 activeFilter={null}
                 hideBuilder={true}
+                hideAmount={true}
               />
               <DeveloperPieChart sales={salesData} />
             </section>

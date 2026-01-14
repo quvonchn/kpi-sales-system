@@ -75,8 +75,8 @@ export default function RankingPage() {
                                 onChange={(e) => setSortBy(e.target.value as 'kpi' | 'sales')}
                                 className={styles.select}
                             >
+                                <option value="sales">Sotuvlar soni bo'yicha</option>
                                 <option value="kpi">KPI summasi bo'yicha</option>
-                                <option value="sales">Sotilgan uy soni bo'yicha</option>
                             </select>
                         </div>
                     </div>
@@ -88,9 +88,8 @@ export default function RankingPage() {
                                     <tr>
                                         <th>#</th>
                                         <th>Operator</th>
-                                        <th>Sotuvlar</th>
-                                        <th>{sortBy === 'kpi' ? 'KPI summasi' : 'Sotuv summasi'}</th>
-                                        <th>Komissiya %</th>
+                                        <th>Sotuvlar soni</th>
+                                        <th>KPI summasi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -104,13 +103,12 @@ export default function RankingPage() {
                                             </td>
                                             <td className={styles.name}>{op.name}</td>
                                             <td className={styles.sales}>{op.salesCount}</td>
-                                            <td>{formatCurrency(sortBy === 'kpi' ? op.commissionAmount : op.totalRevenue)}</td>
-                                            <td className={styles.rate}>{(op.commissionRate * 100).toFixed(0)}%</td>
+                                            <td>{formatCurrency(op.commissionAmount)}</td>
                                         </tr>
                                     ))}
                                     {operators.length === 0 && (
                                         <tr>
-                                            <td colSpan={5} className={styles.empty}>Ma'lumot yo'q</td>
+                                            <td colSpan={4} className={styles.empty}>Ma'lumot yo'q</td>
                                         </tr>
                                     )}
                                 </tbody>

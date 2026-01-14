@@ -64,6 +64,7 @@ export default function HistoryPage() {
                                 sales={displayedSales}
                                 activeFilter={statusFilter}
                                 hideBuilder={false}
+                                hideAmount={true}
                             />
                             <StatusPieChart
                                 sales={sales}

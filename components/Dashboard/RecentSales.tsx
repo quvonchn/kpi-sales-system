@@ -14,6 +14,7 @@ interface RecentSalesProps {
     sales: Sale[];
     activeFilter: string | null;
     hideBuilder?: boolean;
+    hideAmount?: boolean;
 }
 
 const statusLabels: Record<string, string> = {
@@ -24,7 +25,14 @@ const statusLabels: Record<string, string> = {
     'bekor qilindi': 'Bekor qilindi'
 };
 
-export default function RecentSales({ sales, activeFilter, hideBuilder }: RecentSalesProps) {
+export default function RecentSales({ sales, activeFilter, hideBuilder, hideAmount }: RecentSalesProps) {
+    const getColSpan = () => {
+        let span = 4;
+        if (hideBuilder) span--;
+        if (hideAmount) span--;
+        return span;
+    };
+
     return (
         <div className={`card ${styles.container}`}>
             <div className={styles.header}>
@@ -40,7 +48,7 @@ export default function RecentSales({ sales, activeFilter, hideBuilder }: Recent
                             <th>Obyekt</th>
                             {!hideBuilder && <th>Quruvchi</th>}
                             <th>Sana</th>
-                            <th className={styles.right}>Summa</th>
+                            {!hideAmount && <th className={styles.right}>Summa</th>}
                         </tr>
                     </thead>
                     <tbody>
@@ -52,14 +60,16 @@ export default function RecentSales({ sales, activeFilter, hideBuilder }: Recent
                                 </td>
                                 {!hideBuilder && <td className={styles.builder}>{sale.quruvchi}</td>}
                                 <td className={styles.time}>{sale.time}</td>
-                                <td className={`${styles.amount} ${styles.right}`}>
-                                    {new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(sale.amount)}
-                                </td>
+                                {!hideAmount && (
+                                    <td className={`${styles.amount} ${styles.right}`}>
+                                        {new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(sale.amount)}
+                                    </td>
+                                )}
                             </tr>
                         ))}
                         {sales.length === 0 && (
                             <tr>
-                                <td colSpan={hideBuilder ? 3 : 4} className={styles.empty}>Hali sotuv yo'q.</td>
+                                <td colSpan={getColSpan()} className={styles.empty}>Hali sotuv yo'q.</td>
                             </tr>
                         )}
                     </tbody>
@@ -68,3 +78,4 @@ export default function RecentSales({ sales, activeFilter, hideBuilder }: Recent
         </div>
     );
 }
+

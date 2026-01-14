@@ -142,7 +142,7 @@ export default function AdminPage() {
                                     <th>Sotuvlar</th>
                                     <th>Daromad</th>
                                     <th>Komissiya %</th>
-                                    <th>Komissiya</th>
+                                    <th>KPI</th>
                                 </tr>
                             </thead>
                             <tbody>

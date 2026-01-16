@@ -25,9 +25,17 @@ const statusLabels: Record<string, string> = {
     'bekor qilindi': 'Bekor qilindi'
 };
 
+const statusColors: Record<string, string> = {
+    'tasdiqlandi': 'statusApproved',
+    'yangi': 'statusNew',
+    'jarayonda': 'statusPending',
+    'tasdiqlanmadi': 'statusRejected',
+    'bekor qilindi': 'statusCancelled'
+};
+
 export default function RecentSales({ sales, activeFilter, hideBuilder, hideAmount }: RecentSalesProps) {
     const getColSpan = () => {
-        let span = 4;
+        let span = 5; // base columns including status
         if (hideBuilder) span--;
         if (hideAmount) span--;
         return span;
@@ -48,6 +56,7 @@ export default function RecentSales({ sales, activeFilter, hideBuilder, hideAmou
                             <th>Obyekt</th>
                             {!hideBuilder && <th>Quruvchi</th>}
                             <th>Sana</th>
+                            <th>Status</th>
                             {!hideAmount && <th className={styles.right}>Summa</th>}
                         </tr>
                     </thead>
@@ -60,6 +69,11 @@ export default function RecentSales({ sales, activeFilter, hideBuilder, hideAmou
                                 </td>
                                 {!hideBuilder && <td className={styles.builder}>{sale.quruvchi}</td>}
                                 <td className={styles.time}>{sale.time}</td>
+                                <td>
+                                    <span className={`${styles.statusBadge} ${styles[statusColors[sale.status] || 'statusNew']}`}>
+                                        {statusLabels[sale.status] || sale.status}
+                                    </span>
+                                </td>
                                 {!hideAmount && (
                                     <td className={`${styles.amount} ${styles.right}`}>
                                         {new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(sale.amount)}

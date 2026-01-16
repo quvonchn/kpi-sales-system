@@ -15,6 +15,7 @@ interface RecentSalesProps {
     activeFilter: string | null;
     hideBuilder?: boolean;
     hideAmount?: boolean;
+    showBuilderInstead?: boolean; // Show Quruvchi instead of Obyekt in first column
 }
 
 const statusLabels: Record<string, string> = {
@@ -33,7 +34,7 @@ const statusColors: Record<string, string> = {
     'bekor qilindi': 'statusCancelled'
 };
 
-export default function RecentSales({ sales, activeFilter, hideBuilder, hideAmount }: RecentSalesProps) {
+export default function RecentSales({ sales, activeFilter, hideBuilder, hideAmount, showBuilderInstead }: RecentSalesProps) {
     const getColSpan = () => {
         let span = 5; // base columns including status
         if (hideBuilder) span--;
@@ -53,7 +54,7 @@ export default function RecentSales({ sales, activeFilter, hideBuilder, hideAmou
                 <table className={styles.table}>
                     <thead>
                         <tr>
-                            <th>Obyekt</th>
+                            <th>{showBuilderInstead ? 'Quruvchi' : 'Obyekt'}</th>
                             {!hideBuilder && <th>Quruvchi</th>}
                             <th>Sana</th>
                             <th>Status</th>
@@ -64,7 +65,7 @@ export default function RecentSales({ sales, activeFilter, hideBuilder, hideAmou
                         {sales.map((sale) => (
                             <tr key={sale.id}>
                                 <td className={styles.product}>
-                                    <div className={styles.productName}>{sale.product}</div>
+                                    <div className={styles.productName}>{showBuilderInstead ? sale.quruvchi : sale.product}</div>
                                     <div className={styles.statusMobile}>{statusLabels[sale.status] || sale.status}</div>
                                 </td>
                                 {!hideBuilder && <td className={styles.builder}>{sale.quruvchi}</td>}

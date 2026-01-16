@@ -162,6 +162,7 @@ export default function Home() {
                 activeFilter={null}
                 hideBuilder={true}
                 hideAmount={true}
+                showBuilderInstead={true}
               />
               <DeveloperPieChart sales={salesData} />
             </section>

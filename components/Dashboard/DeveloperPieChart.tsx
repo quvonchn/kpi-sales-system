@@ -18,13 +18,12 @@ export default function DeveloperPieChart({ sales }: DeveloperPieChartProps) {
     React.useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
-                // Only trigger if 100% visible
-                if (entry.intersectionRatio >= 1.0) {
+                if (entry.intersectionRatio >= 0.2) {
                     setIsVisible(true);
                 }
             },
             {
-                threshold: [0, 0.5, 1.0]
+                threshold: [0.2, 0.5, 1.0]
             }
         );
 
@@ -51,62 +50,93 @@ export default function DeveloperPieChart({ sales }: DeveloperPieChartProps) {
         percent: (count / total) * 100
     })).sort((a, b) => b.count - a.count);
 
-    // Modern color palette
+    // Color palette matching design
     const colors = [
-        '#6366f1', // Indigo
-        '#10b981', // Emerald
-        '#f59e0b', // Amber
-        '#ef4444', // Red
-        '#8b5cf6', // Violet
-        '#06b6d4', // Cyan
-        '#ec4899'  // Pink
+        '#7970F2', // Purple/Indigo (primary)
+        '#50C878', // Emerald Green
+        '#F5A623', // Amber/Orange
+        '#EF4444', // Red
+        '#06B6D4', // Cyan
+        '#EC4899', // Pink
+        '#8B5CF6', // Violet
     ];
 
-    const topDeveloper = data.length > 0 ? data[0] : null;
+    // Calculate stroke properties for each segment
+    const circumference = 2 * Math.PI * 15.9155; // ~100 for viewBox 36x36
+    let accumulatedOffset = 0;
 
     return (
         <div ref={chartRef} className={`card ${styles.container} ${isVisible ? styles.animate : ''}`}>
             <h3 className={styles.title}>Quruvchilar ulushi</h3>
-            <div className={styles.content}>
-                <div className={styles.chartWrapper}>
-                    <svg viewBox="0 0 36 36" className={`${styles.circularChart} ${isVisible ? styles.animate : ''}`}>
-                        {data.map((item, index) => {
-                            let offset = 0;
-                            for (let i = 0; i < index; i++) {
-                                offset += data[i].percent;
-                            }
-                            return (
-                                <path
-                                    key={item.name}
-                                    className={styles.circle}
-                                    strokeDasharray={`${isVisible ? item.percent : 0} 100`}
-                                    strokeDashoffset={-offset}
-                                    stroke={colors[index % colors.length]}
-                                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                                />
-                            );
-                        })}
-                    </svg>
-                </div>
-                <div className={styles.legend}>
-                    {data.map((item, index) => (
-                        <div key={item.name} className={styles.legendItem}>
-                            <span className={styles.dot} style={{ backgroundColor: colors[index % colors.length] }}></span>
-                            <span className={styles.name}>{item.name}</span>
-                            <span className={styles.percent}>{item.percent.toFixed(0)}%</span>
-                        </div>
-                    ))}
+
+            {/* Chart Container - Centered */}
+            <div className={styles.chartContainer}>
+                <svg
+                    viewBox="0 0 36 36"
+                    className={`${styles.donutChart} ${isVisible ? styles.animateChart : ''}`}
+                >
+                    {/* Background circle (optional subtle ring) */}
+                    <circle
+                        className={styles.backgroundCircle}
+                        cx="18"
+                        cy="18"
+                        r="15.9155"
+                        fill="none"
+                        stroke="rgba(255,255,255,0.1)"
+                        strokeWidth="3"
+                    />
+
+                    {/* Data segments */}
+                    {data.map((item, index) => {
+                        const segmentLength = (item.percent / 100) * circumference;
+                        const dashOffset = -accumulatedOffset;
+                        accumulatedOffset += segmentLength;
+
+                        return (
+                            <circle
+                                key={item.name}
+                                className={styles.segment}
+                                cx="18"
+                                cy="18"
+                                r="15.9155"
+                                fill="none"
+                                stroke={colors[index % colors.length]}
+                                strokeWidth="3.5"
+                                strokeDasharray={`${isVisible ? segmentLength : 0} ${circumference}`}
+                                strokeDashoffset={dashOffset}
+                                strokeLinecap="round"
+                                style={{
+                                    animationDelay: `${index * 0.1}s`
+                                }}
+                            />
+                        );
+                    })}
+                </svg>
+
+                {/* Center text showing total */}
+                <div className={`${styles.centerText} ${isVisible ? styles.fadeIn : ''}`}>
+                    <span className={styles.totalNumber}>{total}</span>
+                    <span className={styles.totalLabel}>Sotuvlar</span>
                 </div>
             </div>
 
-            {topDeveloper && (
-                <div className={styles.motivationBox}>
-                    <p className={styles.motivationText}>
-                        Siz eng ko'p <strong>"{topDeveloper.name}"</strong> quruvchiga tegishli uylarni sotyabsiz.
-                        Agar siz boshqa quruvchiga tegishli qimmatroq uylarni ko'proq sotsangiz daromadingiz o'sishi aniq. 🚀
-                    </p>
-                </div>
-            )}
+            {/* Legend - Below Chart */}
+            <div className={styles.legend}>
+                {data.map((item, index) => (
+                    <div
+                        key={item.name}
+                        className={`${styles.legendItem} ${isVisible ? styles.fadeInUp : ''}`}
+                        style={{ animationDelay: `${0.8 + index * 0.1}s` }}
+                    >
+                        <span
+                            className={styles.legendDot}
+                            style={{ backgroundColor: colors[index % colors.length] }}
+                        />
+                        <span className={styles.legendName}>{item.name}</span>
+                        <span className={styles.legendPercent}>{item.percent.toFixed(0)}%</span>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 }

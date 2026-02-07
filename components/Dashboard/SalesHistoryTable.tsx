@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './SalesHistoryTable.module.css';
+import { calculateCommission } from '@/utils/commission';
 
 interface Sale {
     id: number | string;
@@ -12,7 +13,6 @@ interface Sale {
 
 interface SalesHistoryTableProps {
     sales: Sale[];
-    confirmedOnly?: boolean;
 }
 
 const statusLabels: Record<string, string> = {
@@ -31,11 +31,7 @@ const statusColors: Record<string, string> = {
     'bekor qilindi': 'statusCancelled'
 };
 
-export default function SalesHistoryTable({ sales, confirmedOnly = false }: SalesHistoryTableProps) {
-    const displayedSales = confirmedOnly
-        ? sales.filter(s => s.status === 'tasdiqlandi')
-        : sales;
-
+export default function SalesHistoryTable({ sales }: SalesHistoryTableProps) {
     const formatCurrency = (amount: number) => {
         return new Intl.NumberFormat('uz-UZ', {
             style: 'currency',
@@ -44,16 +40,25 @@ export default function SalesHistoryTable({ sales, confirmedOnly = false }: Sale
         }).format(amount);
     };
 
-    const totalKPI = displayedSales
-        .filter(s => s.status === 'tasdiqlandi')
-        .reduce((sum, s) => sum + s.amount, 0);
+    // Calculate KPI based on confirmed sales using the commission algorithm
+    const confirmedSales = sales.filter(s => s.status === 'tasdiqlandi');
+    const confirmedCount = confirmedSales.length;
+    const totalRevenue = confirmedSales.reduce((sum, s) => sum + s.amount, 0);
+    const kpiData = calculateCommission(confirmedCount, totalRevenue);
 
     return (
         <div className={`card ${styles.container}`}>
             <div className={styles.header}>
                 <h3 className={styles.title}>Sotuvlar Jadvali</h3>
-                <div className={styles.totalBadge}>
-                    Jami KPI: {formatCurrency(totalKPI)}
+                <div className={styles.statsRow}>
+                    <div className={styles.statBadge}>
+                        <span className={styles.statLabel}>Sotuvlar:</span>
+                        <span className={styles.statValue}>{confirmedCount} ta</span>
+                    </div>
+                    <div className={styles.totalBadge}>
+                        <span className={styles.statLabel}>Jami KPI:</span>
+                        <span className={styles.statValue}>{formatCurrency(kpiData.commissionAmount)}</span>
+                    </div>
                 </div>
             </div>
             <div className={styles.tableReflow}>
@@ -61,17 +66,15 @@ export default function SalesHistoryTable({ sales, confirmedOnly = false }: Sale
                     <thead>
                         <tr>
                             <th>Sana</th>
-                            <th>KPI Summasi</th>
                             <th>Quruvchi</th>
                             <th>Obyekt</th>
                             <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {displayedSales.map((sale) => (
+                        {sales.map((sale) => (
                             <tr key={sale.id}>
                                 <td className={styles.time}>{sale.time}</td>
-                                <td className={styles.amount}>{formatCurrency(sale.amount)}</td>
                                 <td className={styles.builder}>{sale.quruvchi || "Noma'lum"}</td>
                                 <td className={styles.product}>{sale.product}</td>
                                 <td>
@@ -81,9 +84,9 @@ export default function SalesHistoryTable({ sales, confirmedOnly = false }: Sale
                                 </td>
                             </tr>
                         ))}
-                        {displayedSales.length === 0 && (
+                        {sales.length === 0 && (
                             <tr>
-                                <td colSpan={5} className={styles.empty}>
+                                <td colSpan={4} className={styles.empty}>
                                     Bu oyda sotuvlar mavjud emas
                                 </td>
                             </tr>

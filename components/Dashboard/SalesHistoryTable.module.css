@@ -24,6 +24,34 @@
     border-radius: 1rem;
     font-size: 0.85rem;
     font-weight: 600;
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+}
+
+.statsRow {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.statBadge {
+    background: var(--border);
+    color: var(--text-main);
+    padding: 0.4rem 0.8rem;
+    border-radius: 1rem;
+    font-size: 0.85rem;
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+}
+
+.statLabel {
+    opacity: 0.8;
+}
+
+.statValue {
+    font-weight: 600;
 }
 
 .tableReflow {

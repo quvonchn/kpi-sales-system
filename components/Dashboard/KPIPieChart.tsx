@@ -5,7 +5,6 @@ import styles from './DeveloperPieChart.module.css'; // Reuse existing styles
 
 interface Sale {
     quruvchi: string;
-    amount: number;
     status: string;
 }
 
@@ -40,7 +39,7 @@ export default function KPIPieChart({ sales }: KPIPieChartProps) {
     if (confirmedSales.length === 0) {
         return (
             <div ref={chartRef} className={`card ${styles.container}`}>
-                <h3 className={styles.title}>Quruvchilar bo'yicha KPI</h3>
+                <h3 className={styles.title}>Quruvchilar ulushi</h3>
                 <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
                     Tasdiqlangan sotuvlar mavjud emas
                 </div>
@@ -48,21 +47,21 @@ export default function KPIPieChart({ sales }: KPIPieChartProps) {
         );
     }
 
-    // Process data - group by quruvchi and sum KPI amounts
-    const kpiByBuilder: Record<string, number> = {};
+    // Process data - group by quruvchi and count sales
+    const countsByBuilder: Record<string, number> = {};
     confirmedSales.forEach(sale => {
         const name = sale.quruvchi || "Noma'lum";
-        kpiByBuilder[name] = (kpiByBuilder[name] || 0) + sale.amount;
+        countsByBuilder[name] = (countsByBuilder[name] || 0) + 1;
     });
 
-    const totalKPI = Object.values(kpiByBuilder).reduce((sum, val) => sum + val, 0);
-    const data = Object.entries(kpiByBuilder)
-        .map(([name, amount]) => ({
+    const total = confirmedSales.length;
+    const data = Object.entries(countsByBuilder)
+        .map(([name, count]) => ({
             name,
-            amount,
-            percent: (amount / totalKPI) * 100
+            count,
+            percent: (count / total) * 100
         }))
-        .sort((a, b) => b.amount - a.amount);
+        .sort((a, b) => b.count - a.count);
 
     // Color palette
     const colors = [
@@ -73,17 +72,9 @@ export default function KPIPieChart({ sales }: KPIPieChartProps) {
     const circumference = 2 * Math.PI * 15.9155;
     let accumulatedOffset = 0;
 
-    const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat('uz-UZ', {
-            style: 'currency',
-            currency: 'UZS',
-            maximumFractionDigits: 0
-        }).format(amount);
-    };
-
     return (
         <div ref={chartRef} className={`card ${styles.container} ${isVisible ? styles.animate : ''}`}>
-            <h3 className={styles.title}>Quruvchilar bo'yicha KPI</h3>
+            <h3 className={styles.title}>Quruvchilar ulushi</h3>
 
             <div className={styles.chartContainer}>
                 <svg
@@ -143,7 +134,7 @@ export default function KPIPieChart({ sales }: KPIPieChartProps) {
                         />
                         <span className={styles.legendName}>{item.name}</span>
                         <span className={styles.legendPercent}>
-                            {item.percent.toFixed(0)}% ({formatCurrency(item.amount)})
+                            {item.percent.toFixed(0)}% ({item.count} ta)
                         </span>
                     </div>
                 ))}

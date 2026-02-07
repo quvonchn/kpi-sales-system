@@ -5,6 +5,7 @@ import styles from './DeveloperPieChart.module.css';
 
 interface Sale {
     quruvchi: string;
+    status?: string;
 }
 
 interface DeveloperPieChartProps {
@@ -34,16 +35,28 @@ export default function DeveloperPieChart({ sales }: DeveloperPieChartProps) {
         return () => observer.disconnect();
     }, []);
 
-    if (!sales || sales.length === 0) return null;
+    // Filter only confirmed sales for KPI calculation
+    const confirmedSales = sales.filter(s => s.status === 'tasdiqlandi');
 
-    // Process data
+    if (!confirmedSales || confirmedSales.length === 0) {
+        return (
+            <div ref={chartRef} className={`card ${styles.container}`}>
+                <h3 className={styles.title}>Quruvchilar ulushi</h3>
+                <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
+                    Tasdiqlangan sotuvlar mavjud emas
+                </div>
+            </div>
+        );
+    }
+
+    // Process data - only confirmed sales
     const counts: Record<string, number> = {};
-    sales.forEach(sale => {
-        const name = sale.quruvchi || 'Noma\'lum';
+    confirmedSales.forEach(sale => {
+        const name = sale.quruvchi || "Noma'lum";
         counts[name] = (counts[name] || 0) + 1;
     });
 
-    const total = sales.length;
+    const total = confirmedSales.length;
     const data = Object.entries(counts).map(([name, count]) => ({
         name,
         count,

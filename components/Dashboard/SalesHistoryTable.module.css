@@ -152,6 +152,23 @@
     font-style: italic;
 }
 
+.pending {
+    color: var(--text-secondary);
+    opacity: 0.5;
+}
+
+.footer {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+.note {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
 @media (max-width: 768px) {
     .table {
         font-size: 0.8rem;

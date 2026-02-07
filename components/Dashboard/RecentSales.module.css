@@ -134,3 +134,22 @@
     background-color: rgba(107, 114, 128, 0.15);
     color: #6b7280;
 }
+
+.rateBadge {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.kpiAmount {
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.pending {
+    color: var(--text-secondary);
+    opacity: 0.5;
+}

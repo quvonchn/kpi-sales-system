@@ -111,3 +111,92 @@ export async function getMonthlyCommission(operatorName: string): Promise<number
     const sales = await getTodaySalesFromSheets(operatorName);
     return sales.reduce((sum, sale) => sum + sale.amount, 0);
 }
+
+/**
+ * Get sales for a specific month and year
+ * Used for historical sales analysis
+ */
+export async function getSalesByMonth(
+    operatorName?: string,
+    month?: number,
+    year?: number
+): Promise<SheetSale[]> {
+    if (!process.env.GOOGLE_SHEETS_CREDENTIALS || !process.env.GOOGLE_SHEET_ID) {
+        console.warn("Google Sheets credentials missing. Returning empty array.");
+        return [];
+    }
+
+    try {
+        const credentials = JSON.parse(process.env.GOOGLE_SHEETS_CREDENTIALS);
+
+        const auth = new google.auth.GoogleAuth({
+            credentials,
+            scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
+        });
+
+        const sheets = google.sheets({ version: 'v4', auth });
+
+        // Use provided month/year or default to current
+        const today = new Date();
+        const targetMonth = month ?? (today.getMonth() + 1);
+        const targetYear = year ?? today.getFullYear();
+
+        console.log(`Fetching sales for operator: ${operatorName || 'All'}, Month: ${targetMonth}, Year: ${targetYear}`);
+
+        const response = await sheets.spreadsheets.values.get({
+            spreadsheetId: process.env.GOOGLE_SHEET_ID,
+            range: 'Лист1!A2:G',
+        });
+
+        const rows = response.data.values || [];
+
+        const sales: SheetSale[] = rows
+            .filter((row) => {
+                const salesDate = row[2];
+                if (!salesDate) return false;
+
+                const dateParts = salesDate.toString().split('-');
+                if (dateParts.length < 2) return false;
+
+                const rowYear = parseInt(dateParts[0]);
+                const rowMonth = parseInt(dateParts[1]);
+
+                const matchesMonth = rowYear === targetYear && rowMonth === targetMonth;
+
+                const operator = (row[1] || '').toString().toLowerCase().trim();
+                const matchesOperator = !operatorName || operator === operatorName.toLowerCase().trim();
+
+                return matchesMonth && matchesOperator;
+            })
+            .map((row) => {
+                const salesDate = row[2] || '';
+                const commission = row[3] || '0';
+
+                const displayDate = salesDate.includes(' ')
+                    ? salesDate.split(' ')[0]
+                    : salesDate;
+
+                const commissionAmount = parseFloat(commission.toString().replace(/[^0-9.-]/g, '') || '0');
+
+                return {
+                    id: (row[0] || 'N/A').toString(),
+                    operator: (row[1] || 'Unknown').toString(),
+                    salesDate: salesDate.toString(),
+                    commission: commission.toString(),
+                    quruvchi: (row[4] || '').toString(),
+                    obyekt: (row[5] || 'Unknown Object').toString(),
+                    status: (row[6] || '').toString().toLowerCase().trim(),
+                    amount: commissionAmount,
+                    product: (row[5] || 'Unknown Object').toString(),
+                    time: displayDate.toString(),
+                };
+            });
+
+        console.log(`Fetched ${sales.length} sales for month ${targetMonth}/${targetYear}`);
+        return sales;
+
+    } catch (error) {
+        console.error("Google Sheets API Error:", error);
+        return [];
+    }
+}

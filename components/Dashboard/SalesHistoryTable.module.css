@@ -1,0 +1,145 @@
+.container {
+    flex: 2;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.totalBadge {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.tableReflow {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.table th,
+.table td {
+    text-align: left;
+    padding: 0.75rem 0.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.table th {
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(0, 163, 137, 0.05);
+}
+
+.time {
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.amount {
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.builder {
+    color: var(--text-main);
+}
+
+.product {
+    color: var(--text-secondary);
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.statusBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.6rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.statusApproved {
+    background: rgba(0, 163, 137, 0.15);
+    color: #00A389;
+}
+
+.statusNew {
+    background: rgba(59, 130, 246, 0.15);
+    color: #3b82f6;
+}
+
+.statusPending {
+    background: rgba(245, 166, 35, 0.15);
+    color: #F5A623;
+}
+
+.statusRejected {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.statusCancelled {
+    background: rgba(107, 114, 128, 0.15);
+    color: #6b7280;
+}
+
+.empty {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 2rem !important;
+    font-style: italic;
+}
+
+@media (max-width: 768px) {
+    .table {
+        font-size: 0.8rem;
+    }
+
+    .table th,
+    .table td {
+        padding: 0.6rem 0.4rem;
+    }
+
+    .product {
+        max-width: 120px;
+    }
+
+    .totalBadge {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.6rem;
+    }
+}

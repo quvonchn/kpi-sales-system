@@ -10,6 +10,7 @@ import AuthGuard from '@/components/Auth/AuthGuard';
 import UpsellCard from '@/components/Motivational/UpsellCard';
 import StatusPieChart from '@/components/Dashboard/StatusPieChart';
 import DeveloperPieChart from '@/components/Dashboard/DeveloperPieChart'; // Keeping for reference if needed elsewhere
+import RamadanBanner from '@/components/Dashboard/RamadanBanner';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -102,6 +103,7 @@ export default function Home() {
         <Sidebar />
         <main className={styles.main}>
           <Header />
+          <RamadanBanner />
 
           {isUsingMock && (
             <div style={{

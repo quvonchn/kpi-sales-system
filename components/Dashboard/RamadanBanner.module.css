@@ -1,0 +1,243 @@
+/* ===== RAMADAN BANNER — PREMIUM REDESIGN ===== */
+.banner {
+    position: relative;
+    margin-bottom: 2rem;
+    padding: 1.25rem 2rem;
+    border-radius: 20px;
+    background: linear-gradient(135deg,
+            rgba(13, 27, 62, 0.95) 0%,
+            rgba(20, 40, 71, 0.9) 40%,
+            rgba(10, 42, 74, 0.95) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 215, 0, 0.15);
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.25),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Golden Border Shimmer — Light effect that follows the border */
+.banner::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    padding: 1px;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 215, 0, 0.05) 20%,
+            rgba(255, 215, 0, 0.4) 50%,
+            rgba(255, 215, 0, 0.05) 80%,
+            transparent 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    background-size: 200% 100%;
+    animation: borderShimmer 4s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes borderShimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.bannerVisible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Background stars */
+.bgStars {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.bgStar {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 0 5px #FFD700;
+    animation: bannerStarPulse 3s ease-in-out infinite;
+}
+
+@keyframes bannerStarPulse {
+
+    0%,
+    100% {
+        opacity: 0.1;
+        transform: scale(0.8);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.4);
+    }
+}
+
+/* Content layout */
+.content {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+
+.leftSection {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+/* Premium Moon Styling */
+.premiumMoonContainer {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.premiumMoon {
+    height: 100%;
+    object-fit: contain;
+    mix-blend-mode: screen;
+    filter: drop-shadow(0 0 15px rgba(255, 196, 0, 0.4));
+    -webkit-mask-image: radial-gradient(circle, black 40%, transparent 75%);
+    mask-image: radial-gradient(circle, black 40%, transparent 75%);
+    animation: bannerMoonFloat 4s ease-in-out infinite;
+}
+
+@keyframes bannerMoonFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.textContent {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.greetingTitle {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #FFD700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+
+.greetingSubtitle {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+    font-weight: 400;
+}
+
+/* Right Section */
+.rightSection {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-shrink: 0;
+}
+
+.premiumLantern {
+    height: 70px;
+    object-fit: contain;
+    mix-blend-mode: screen;
+    filter: drop-shadow(0 0 15px rgba(255, 180, 0, 0.3));
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+    animation: bannerLanternSwing 3.5s ease-in-out infinite;
+    transform-origin: top center;
+}
+
+@keyframes bannerLanternSwing {
+
+    0%,
+    100% {
+        transform: rotate(-3deg);
+    }
+
+    50% {
+        transform: rotate(3deg);
+    }
+}
+
+.dismissBtn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    padding: 0;
+}
+
+.dismissBtn:hover {
+    background: rgba(255, 50, 50, 0.15);
+    color: white;
+    border-color: rgba(255, 50, 50, 0.3);
+    transform: rotate(90deg);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .banner {
+        padding: 1rem 1.5rem;
+    }
+
+    .premiumMoonContainer {
+        width: 45px;
+        height: 45px;
+    }
+
+    .premiumLantern {
+        height: 50px;
+    }
+
+    .greetingTitle {
+        font-size: 1rem;
+    }
+
+    .greetingSubtitle {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 500px) {
+    .premiumLantern {
+        display: none;
+    }
+}

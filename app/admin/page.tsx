@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './admin.module.css';
 import Sidebar from '@/components/Dashboard/Sidebar';
+import AdminTrendChart from '@/components/Dashboard/AdminTrendChart';
 
 interface OperatorStat {
     name: string;
@@ -114,6 +115,9 @@ export default function AdminPage() {
                         </div>
                     </div>
                 )}
+
+                {/* Trend Line Chart */}
+                <AdminTrendChart />
 
                 {/* Operators Table */}
                 <div className={`card ${styles.tableCard}`}>

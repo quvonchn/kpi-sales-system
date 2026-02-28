@@ -1,0 +1,156 @@
+.loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+.emptyState {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    font-style: italic;
+}
+
+.container {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.titleInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.subtitle {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.contentGrid {
+    display: flex;
+    gap: 2rem;
+    height: 300px;
+}
+
+.chartArea {
+    flex: 3;
+    min-width: 0;
+    /* Ensures recharts scales down properly */
+}
+
+.sidebar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid var(--border);
+    padding-left: 1.5rem;
+}
+
+.sidebarTitle {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0 0 1rem 0;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.operatorList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+/* Custom Scrollbar for Operator List */
+.operatorList::-webkit-scrollbar {
+    width: 4px;
+}
+
+.operatorList::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.operatorList::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+}
+
+.operatorBtn {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-main);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.operatorBtn:hover {
+    background: var(--bg-hover, rgba(0, 0, 0, 0.02));
+}
+
+.operatorBtnActive {
+    background: rgba(var(--primary-rgb, 13, 110, 253), 0.1);
+    color: var(--primary);
+    border-color: rgba(var(--primary-rgb, 13, 110, 253), 0.2);
+    font-weight: 600;
+}
+
+@media (max-width: 900px) {
+    .contentGrid {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .chartArea {
+        height: 300px;
+        order: 2;
+    }
+
+    .sidebar {
+        border-left: none;
+        border-bottom: 1px solid var(--border);
+        padding-left: 0;
+        padding-bottom: 1.5rem;
+        order: 1;
+    }
+
+    .operatorList {
+        flex-direction: row;
+        flex-wrap: wrap;
+        max-height: 150px;
+    }
+
+    .operatorBtn {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+    }
+}

@@ -1,0 +1,336 @@
+.popoverContainer {
+    position: relative;
+    display: inline-block;
+}
+
+.filterTrigger {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-main);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.filterTrigger svg {
+    color: var(--text-secondary);
+}
+
+.filterTrigger:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.filterTrigger:hover svg {
+    color: var(--primary);
+}
+
+.activeTrigger {
+    border-color: var(--primary);
+    background-color: rgba(var(--primary-rgb, 13, 110, 253), 0.05);
+}
+
+.badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: var(--primary);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+}
+
+.popoverContent {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 360px;
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.popoverHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.popoverHeader h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--text-main);
+}
+
+.closeBtn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+}
+
+.closeBtn:hover {
+    color: var(--danger, #dc3545);
+}
+
+.popoverBody {
+    padding: 1.25rem;
+    max-height: 60vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.formGroup label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.dateRow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.dateInputWrapper {
+    position: relative;
+    flex: 1;
+}
+
+.dateInputWrapper input {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background-color: var(--bg-hover, #f8f9fa);
+    color: var(--text-main);
+    font-size: 0.85rem;
+    cursor: pointer;
+    outline: none;
+}
+
+.dateInputWrapper input:focus {
+    border-color: var(--primary);
+}
+
+.dateSeparator {
+    color: var(--text-secondary);
+    font-weight: bold;
+}
+
+/* Custom Calendar */
+.calendarDropdown {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    width: 260px;
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    z-index: 101;
+    padding: 1rem;
+}
+
+.calendarHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.calendarHeader button {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+}
+
+.calendarHeader button:hover {
+    background: var(--bg-hover, #f8f9fa);
+    color: var(--primary);
+}
+
+.calendarTitle {
+    display: flex;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.calendarYear {
+    color: var(--primary);
+}
+
+.calendarGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.25rem;
+    text-align: center;
+}
+
+.calendarDayHead {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: bold;
+    padding-bottom: 0.5rem;
+}
+
+.calendarDay {
+    padding: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--text-main);
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.calendarDay:hover:not(.calendarDayEmpty) {
+    background-color: var(--primary);
+    color: white;
+}
+
+.calendarDayEmpty {
+    cursor: default;
+}
+
+/* Multi-select Chips */
+.chipContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.chip {
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background-color: var(--background);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.chip:hover {
+    border-color: var(--primary);
+}
+
+.chipSelected {
+    background-color: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* Select */
+.selectInput {
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background-color: var(--bg-hover, #f8f9fa);
+    color: var(--text-main);
+    font-size: 0.9rem;
+    outline: none;
+    cursor: pointer;
+}
+
+.selectInput:focus {
+    border-color: var(--primary);
+}
+
+.emptyItems {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+.popoverFooter {
+    padding: 1rem 1.25rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+.btnSecondary,
+.btnPrimary {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btnSecondary {
+    background-color: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+}
+
+.btnSecondary:hover {
+    background-color: var(--bg-hover, #f8f9fa);
+    color: var(--text-main);
+}
+
+.btnPrimary {
+    background-color: var(--primary);
+    border: 1px solid var(--primary);
+    color: white;
+}
+
+.btnPrimary:hover {
+    opacity: 0.9;
+}
+
+@media (max-width: 480px) {
+    .popoverContent {
+        width: calc(100vw - 40px);
+        right: -20px;
+        /* Align nicer on mobile depending on parent */
+    }
+}

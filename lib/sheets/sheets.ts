@@ -200,3 +200,90 @@ export async function getSalesByMonth(
         return [];
     }
 }
+
+/**
+ * Get all sales (optionally filtered by date range).
+ * Used for admin advanced filtering.
+ */
+export async function getSalesByDateRange(
+    startDate?: string,
+    endDate?: string
+): Promise<SheetSale[]> {
+    if (!process.env.GOOGLE_SHEETS_CREDENTIALS || !process.env.GOOGLE_SHEET_ID) {
+        console.warn("Google Sheets credentials missing. Returning empty array.");
+        return [];
+    }
+
+    try {
+        const credentials = JSON.parse(process.env.GOOGLE_SHEETS_CREDENTIALS);
+
+        const auth = new google.auth.GoogleAuth({
+            credentials,
+            scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
+        });
+
+        const sheets = google.sheets({ version: 'v4', auth });
+
+        const response = await sheets.spreadsheets.values.get({
+            spreadsheetId: process.env.GOOGLE_SHEET_ID,
+            range: 'Лист1!A2:G',
+        });
+
+        const rows = response.data.values || [];
+
+        const start = startDate ? new Date(startDate) : null;
+        const end = endDate ? new Date(endDate) : null;
+
+        // Reset time part for end date to include the whole day if we're comparing
+        if (end) {
+            end.setHours(23, 59, 59, 999);
+        }
+
+        const sales: SheetSale[] = rows
+            .filter((row) => {
+                const salesDateStr = row[2];
+                if (!salesDateStr) return false;
+
+                // Expected format from sheets might be DD-MM-YYYY or YYYY-MM-DD
+                // Let's try parsing it safely: Assuming format YYYY-MM-DD based on existing code `split('-')` and `rowYear = parseInt(dateParts[0])`
+                const salesDate = new Date(salesDateStr.toString());
+
+                // If date is invalid, don't include
+                if (isNaN(salesDate.getTime())) return false;
+
+                if (start && salesDate < start) return false;
+                if (end && salesDate > end) return false;
+
+                return true;
+            })
+            .map((row) => {
+                const salesDate = row[2] || '';
+                const commission = row[3] || '0';
+
+                const displayDate = salesDate.includes(' ')
+                    ? salesDate.split(' ')[0]
+                    : salesDate;
+
+                const commissionAmount = parseFloat(commission.toString().replace(/[^0-9.-]/g, '') || '0');
+
+                return {
+                    id: (row[0] || 'N/A').toString(),
+                    operator: (row[1] || 'Unknown').toString().trim(),
+                    salesDate: salesDate.toString(),
+                    commission: commission.toString(),
+                    quruvchi: (row[4] || '').toString().trim(),
+                    obyekt: (row[5] || 'Unknown Object').toString(),
+                    status: (row[6] || '').toString().toLowerCase().trim(),
+                    amount: commissionAmount,
+                    product: (row[5] || 'Unknown Object').toString(),
+                    time: displayDate.toString(),
+                };
+            });
+
+        return sales;
+
+    } catch (error) {
+        console.error("Google Sheets API Error in getSalesByDateRange:", error);
+        return [];
+    }
+}

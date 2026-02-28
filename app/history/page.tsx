@@ -7,6 +7,7 @@ import Sidebar from '@/components/Dashboard/Sidebar';
 import Header from '@/components/Dashboard/Header';
 import AuthGuard from '@/components/Auth/AuthGuard';
 import MonthFilter from '@/components/Dashboard/MonthFilter';
+import AdminFilterPopover from '@/components/Dashboard/AdminFilterPopover';
 import SalesHistoryTable from '@/components/Dashboard/SalesHistoryTable';
 import AdminSalesHistoryTable from '@/components/Dashboard/AdminSalesHistoryTable';
 import KPIPieChart from '@/components/Dashboard/KPIPieChart';
@@ -37,21 +38,53 @@ export default function HistoryPage() {
     const [selectedYear] = useState(currentYear);
     const [isAdmin, setIsAdmin] = useState(false);
 
+    // Admin Filter States
+    const [adminFilters, setAdminFilters] = useState<{
+        startDate?: string;
+        endDate?: string;
+        operators: string[];
+        builder?: string;
+    }>({ operators: [] });
+
+    const [availableOperators, setAvailableOperators] = useState<string[]>([]);
+    const [availableBuilders, setAvailableBuilders] = useState<string[]>([]);
+
     useEffect(() => {
+        const checkAdmin = () => {
+            const operator = localStorage.getItem('operator');
+            setIsAdmin(operator?.trim().toLowerCase() === 'admin');
+            return operator;
+        };
+
+        const operator = checkAdmin();
+
         async function fetchData() {
             setLoading(true);
             try {
-                const operator = localStorage.getItem('operator');
-                const isUserAdmin = operator?.trim().toLowerCase() === 'admin';
-                setIsAdmin(isUserAdmin);
+                if (operator?.trim().toLowerCase() === 'admin') {
+                    // Admin Fetch Logic
+                    const params = new URLSearchParams();
+                    if (adminFilters.startDate) params.append('startDate', adminFilters.startDate);
+                    if (adminFilters.endDate) params.append('endDate', adminFilters.endDate);
+                    if (adminFilters.operators.length > 0) params.append('operators', adminFilters.operators.join(','));
+                    if (adminFilters.builder) params.append('builder', adminFilters.builder);
 
-                const targetOperator = isUserAdmin ? 'all' : operator;
+                    const response = await fetch(`/api/admin/sales/filter?${params.toString()}`);
+                    const data = await response.json();
 
-                const response = await fetch(
-                    `/api/sales/history?operator=${targetOperator}&month=${selectedMonth}&year=${selectedYear}`
-                );
-                const data = await response.json();
-                setSales(data.sales || []);
+                    setSales(data.sales || []);
+                    if (data.metadata) {
+                        setAvailableOperators(data.metadata.uniqueOperators || []);
+                        setAvailableBuilders(data.metadata.uniqueBuilders || []);
+                    }
+                } else {
+                    // Operator Fetch Logic
+                    const response = await fetch(
+                        `/api/sales/history?operator=${operator}&month=${selectedMonth}&year=${selectedYear}`
+                    );
+                    const data = await response.json();
+                    setSales(data.sales || []);
+                }
             } catch (e) {
                 console.error(e);
                 setSales([]);
@@ -59,8 +92,9 @@ export default function HistoryPage() {
                 setLoading(false);
             }
         }
+
         fetchData();
-    }, [selectedMonth, selectedYear]);
+    }, [selectedMonth, selectedYear, adminFilters]);
 
     const handleMonthChange = (month: number) => {
         setSelectedMonth(month);
@@ -76,18 +110,30 @@ export default function HistoryPage() {
                     <Header />
 
                     <div className={styles.dashboardGrid}>
-                        <div className={styles.pageTitle}>
-                            <h1>Savdolar Tarixi</h1>
-                            <p>{MONTH_NAMES[selectedMonth - 1]} {selectedYear} - oylik tahlil</p>
+                        <div className={styles.pageTitle} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div>
+                                <h1>Savdolar Tarixi</h1>
+                                <p>{isAdmin ? "Barcha savdolar va filtrlash imkoniyati" : `${MONTH_NAMES[selectedMonth - 1]} ${selectedYear} - oylik tahlil`}</p>
+                            </div>
+                            {isAdmin && (
+                                <AdminFilterPopover
+                                    onApplyFilters={setAdminFilters}
+                                    availableOperators={availableOperators}
+                                    availableBuilders={availableBuilders}
+                                    initialFilters={adminFilters}
+                                />
+                            )}
                         </div>
 
-                        <MonthFilter
-                            selectedMonth={selectedMonth}
-                            onMonthChange={handleMonthChange}
-                            currentYear={selectedYear}
-                        />
+                        {!isAdmin && (
+                            <MonthFilter
+                                selectedMonth={selectedMonth}
+                                onMonthChange={handleMonthChange}
+                                currentYear={selectedYear}
+                            />
+                        )}
 
-                        {isFutureMonth ? (
+                        {!isAdmin && isFutureMonth ? (
                             <div className={historyStyles.emptyState}>
                                 <div className={historyStyles.emptyIcon}>📅</div>
                                 <h3>Bu oyda hali savdo mavjud emas</h3>

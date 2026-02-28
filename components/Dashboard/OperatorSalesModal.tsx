@@ -67,17 +67,13 @@ export default function OperatorSalesModal({ isOpen, onClose, operatorName, sale
                     ) : (
                         <>
                             <div className={styles.statsSummary}>
-                                <div className={styles.statBox}>
-                                    <span className={styles.statLabel}>Tasdiqlangan</span>
-                                    <span className={styles.statValue}>{confirmedSales.length} ta</span>
-                                </div>
-                                <div className={styles.statBox}>
-                                    <span className={styles.statLabel}>Kutilmoqda/Boshqa</span>
-                                    <span className={styles.statValue}>{sales.length - confirmedSales.length} ta</span>
-                                </div>
                                 <div className={`${styles.statBox} ${styles.statBoxTotal}`}>
                                     <span className={styles.statLabel}>Tasdiqlangan Daromad</span>
                                     <span className={styles.statValue}>{formatCurrency(totalRevenue)}</span>
+                                </div>
+                                <div className={styles.statBox}>
+                                    <span className={styles.statLabel}>Sotuvlar soni</span>
+                                    <span className={styles.statValue}>{confirmedSales.length} ta</span>
                                 </div>
                             </div>
 
@@ -92,7 +88,7 @@ export default function OperatorSalesModal({ isOpen, onClose, operatorName, sale
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {sales.map((sale, index) => (
+                                        {confirmedSales.map((sale, index) => (
                                             <tr key={`${sale.id}-${index}`}>
                                                 <td className={styles.time}>{sale.time}</td>
                                                 <td className={styles.product}>
@@ -100,22 +96,19 @@ export default function OperatorSalesModal({ isOpen, onClose, operatorName, sale
                                                     <div className={styles.builder}>{sale.quruvchi || "Noma'lum"}</div>
                                                 </td>
                                                 <td className={styles.amount}>
-                                                    {sale.status === 'tasdiqlandi'
-                                                        ? formatCurrency(sale.amount)
-                                                        : <span className={styles.pending}>{formatCurrency(sale.amount)}</span>
-                                                    }
+                                                    {formatCurrency(sale.amount)}
                                                 </td>
                                                 <td>
-                                                    <span className={`${styles.statusBadge} ${styles[statusColors[sale.status] || 'statusNew']}`}>
+                                                    <span className={`${styles.statusBadge} ${styles.statusApproved}`}>
                                                         {statusLabels[sale.status] || sale.status}
                                                     </span>
                                                 </td>
                                             </tr>
                                         ))}
-                                        {sales.length === 0 && (
+                                        {confirmedSales.length === 0 && (
                                             <tr>
                                                 <td colSpan={4} className={styles.empty}>
-                                                    Bu oyda savdo mavjud emas
+                                                    Bu oyda tasdiqlangan savdo mavjud emas
                                                 </td>
                                             </tr>
                                         )}

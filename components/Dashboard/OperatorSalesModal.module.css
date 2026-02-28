@@ -12,7 +12,8 @@
 }
 
 .modal {
-    width: 450px;
+    width: 600px;
+    max-width: 90vw;
     height: 100vh;
     background-color: var(--background);
     box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
@@ -63,7 +64,10 @@
 
 .content {
     padding: 1.5rem;
-    overflow-y: auto;
+    overflow-y: hidden;
+    /* Prevent full modal scroll if we just want table scroll */
+    display: flex;
+    flex-direction: column;
     flex: 1;
 }
 
@@ -117,9 +121,12 @@
 
 .tableReflow {
     overflow-x: auto;
+    overflow-y: auto;
     border: 1px solid var(--border);
     border-radius: 8px;
     background: var(--background);
+    flex: 1;
+    /* Allow table container to take up remaining height */
 }
 
 .table {

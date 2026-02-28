@@ -15,18 +15,21 @@ export async function GET() {
         const monthlyData: Record<string, { monthDate: Date, total: number, operators: Record<string, number> }> = {};
 
         confirmedSales.forEach(sale => {
-            // Expected salesDate format 'YYYY-MM-DD' or similar parseable date
             if (!sale.salesDate) return;
 
-            // Try to parse Date safely. If salesDate contains ' ', take first part
-            const dateStr = sale.salesDate.includes(' ') ? sale.salesDate.split(' ')[0] : sale.salesDate;
-            const dateObj = new Date(dateStr);
+            // Use string splitting to get year and month, same as lib/sheets/sheets.ts
+            // To avoid timezone shifts with new Date()
+            const dateStr = sale.salesDate.split(' ')[0]; // Handle 'YYYY-MM-DD HH:mm:ss'
+            const dateParts = dateStr.split('-');
 
-            if (isNaN(dateObj.getTime())) return;
+            if (dateParts.length < 2) return;
 
-            const year = dateObj.getFullYear();
-            const month = dateObj.getMonth(); // 0-11
-            const monthKey = `${year}-${month.toString().padStart(2, '0')}`; // e.g., '2026-00' for Jan
+            const year = parseInt(dateParts[0]);
+            const month = parseInt(dateParts[1]) - 1; // Convert to 0-11 for consistency with my logic
+
+            if (isNaN(year) || isNaN(month)) return;
+
+            const monthKey = `${year}-${month.toString().padStart(2, '0')}`;
 
             if (!monthlyData[monthKey]) {
                 monthlyData[monthKey] = {

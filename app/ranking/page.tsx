@@ -5,6 +5,7 @@ import styles from './ranking.module.css';
 import Sidebar from '@/components/Dashboard/Sidebar';
 import Header from '@/components/Dashboard/Header';
 import AuthGuard from '@/components/Auth/AuthGuard';
+import OperatorSalesModal from '@/components/Dashboard/OperatorSalesModal';
 
 interface OperatorStat {
     name: string;
@@ -19,8 +20,20 @@ export default function RankingPage() {
     const [operators, setOperators] = useState<OperatorStat[]>([]);
     const [loading, setLoading] = useState(true);
     const [sortBy, setSortBy] = useState<'kpi' | 'sales'>('kpi');
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    // Modal state
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedOperator, setSelectedOperator] = useState<string | null>(null);
+    const [operatorSales, setOperatorSales] = useState<any[]>([]);
+    const [loadingSales, setLoadingSales] = useState(false);
 
     useEffect(() => {
+        const checkAdmin = () => {
+            const operator = localStorage.getItem('operator');
+            setIsAdmin(operator?.trim().toLowerCase() === 'admin');
+        };
+
         async function fetchStats() {
             try {
                 const response = await fetch('/api/admin/stats');
@@ -33,8 +46,29 @@ export default function RankingPage() {
             }
         }
 
+        checkAdmin();
         fetchStats();
     }, []);
+
+    const handleRowClick = async (operatorName: string) => {
+        if (!isAdmin) return;
+
+        setSelectedOperator(operatorName);
+        setIsModalOpen(true);
+        setLoadingSales(true);
+
+        try {
+            // Using the existing history API to fetch all current month sales for this operator
+            const response = await fetch(`/api/sales/history?operator=${encodeURIComponent(operatorName)}`);
+            const data = await response.json();
+            setOperatorSales(data.sales || []);
+        } catch (error) {
+            console.error('Error fetching operator sales:', error);
+            setOperatorSales([]);
+        } finally {
+            setLoadingSales(false);
+        }
+    };
 
     const sortedOperators = [...operators].sort((a, b) => {
         if (sortBy === 'kpi') {
@@ -94,7 +128,11 @@ export default function RankingPage() {
                                 </thead>
                                 <tbody>
                                     {sortedOperators.map((op, index) => (
-                                        <tr key={op.name}>
+                                        <tr
+                                            key={op.name}
+                                            onClick={() => handleRowClick(op.name)}
+                                            className={isAdmin ? styles.clickableRow : ''}
+                                        >
                                             <td className={styles.rank}>
                                                 {index === 0 && '🥇'}
                                                 {index === 1 && '🥈'}
@@ -115,6 +153,14 @@ export default function RankingPage() {
                             </table>
                         </div>
                     </div>
+
+                    <OperatorSalesModal
+                        isOpen={isModalOpen}
+                        onClose={() => setIsModalOpen(false)}
+                        operatorName={selectedOperator}
+                        sales={operatorSales}
+                        loading={loadingSales}
+                    />
                 </main>
             </div>
         </AuthGuard>

@@ -112,6 +112,19 @@
     background-color: var(--background);
 }
 
+.clickableRow {
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.clickableRow:hover {
+    background-color: var(--bg-hover, #f8f9fa) !important;
+}
+
+.clickableRow:active {
+    transform: scale(0.995);
+}
+
 .rank {
     font-size: 1.25rem;
     font-weight: 700;

@@ -38,6 +38,9 @@ export default function AdminFilterPopover({ onApplyFilters, availableOperators,
     const [calendarMonth, setCalendarMonth] = useState(new Date().getMonth());
     const [calendarYear, setCalendarYear] = useState(new Date().getFullYear());
 
+    // Dropdown state for operators
+    const [showOperatorDropdown, setShowOperatorDropdown] = useState(false);
+
     const popoverRef = useRef<HTMLDivElement>(null);
 
     // Close on click outside
@@ -47,6 +50,7 @@ export default function AdminFilterPopover({ onApplyFilters, availableOperators,
                 setIsOpen(false);
                 setShowStartCalendar(false);
                 setShowEndCalendar(false);
+                setShowOperatorDropdown(false);
             }
         }
         if (isOpen) {
@@ -118,7 +122,7 @@ export default function AdminFilterPopover({ onApplyFilters, availableOperators,
     };
 
     const renderCalendar = (isStart: boolean) => (
-        <div className={styles.calendarDropdown}>
+        <div className={`${styles.calendarDropdown} ${!isStart ? styles.calendarRight : ''}`}>
             <div className={styles.calendarHeader}>
                 <button type="button" onClick={(e) => { e.stopPropagation(); setCalendarMonth(prev => prev === 0 ? 11 : prev - 1); if (calendarMonth === 0) setCalendarYear(prev => prev - 1); }}>&lt;</button>
                 <div className={styles.calendarTitle}>
@@ -198,20 +202,53 @@ export default function AdminFilterPopover({ onApplyFilters, availableOperators,
 
                         {/* Operators Multi-Select */}
                         <div className={styles.formGroup}>
-                            <label>Operatorlar (Ko'p tanlov)</label>
+                            <label>Operatorlar</label>
                             {availableOperators.length === 0 ? (
                                 <div className={styles.emptyItems}>Ma'lumotlar yo'q</div>
                             ) : (
-                                <div className={styles.chipContainer}>
-                                    {availableOperators.map(op => (
-                                        <button
-                                            key={op}
-                                            onClick={() => toggleOperator(op)}
-                                            className={`${styles.chip} ${selectedOperators.includes(op) ? styles.chipSelected : ''}`}
-                                        >
-                                            {op}
-                                        </button>
-                                    ))}
+                                <div className={styles.customSelectWrapper}>
+                                    <div
+                                        className={styles.selectInput}
+                                        onClick={() => setShowOperatorDropdown(!showOperatorDropdown)}
+                                    >
+                                        Barchasi
+                                        <span className={styles.dropdownArrow}>▼</span>
+                                    </div>
+
+                                    {showOperatorDropdown && (
+                                        <div className={styles.dropdownMenu}>
+                                            {availableOperators.map(op => (
+                                                <div
+                                                    key={op}
+                                                    className={`${styles.dropdownItem} ${selectedOperators.includes(op) ? styles.dropdownItemSelected : ''}`}
+                                                    onClick={(e) => { e.stopPropagation(); toggleOperator(op); }}
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={selectedOperators.includes(op)}
+                                                        readOnly
+                                                        onChange={() => { }}
+                                                    />
+                                                    <span>{op}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {selectedOperators.length > 0 && (
+                                        <div className={styles.selectedChipsContainer}>
+                                            {selectedOperators.map(op => (
+                                                <div key={`selected-${op}`} className={styles.selectedChip}>
+                                                    {op}
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => toggleOperator(op)}
+                                                        className={styles.removeChipBtn}
+                                                    >×</button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>

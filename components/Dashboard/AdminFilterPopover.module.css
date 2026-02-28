@@ -58,7 +58,8 @@
     position: absolute;
     top: calc(100% + 10px);
     right: 0;
-    width: 360px;
+    width: 400px;
+    /* Made slightly wider to better fit elements */
     background-color: var(--background);
     border: 1px solid var(--border);
     border-radius: 12px;
@@ -174,6 +175,11 @@
     padding: 1rem;
 }
 
+.calendarRight {
+    left: auto;
+    right: 0;
+}
+
 .calendarHeader {
     display: flex;
     justify-content: space-between;
@@ -238,32 +244,100 @@
     cursor: default;
 }
 
-/* Multi-select Chips */
-.chipContainer {
+/* Dropdown Select (Custom) */
+.customSelectWrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.selectInput {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background-color: var(--bg-hover, #f8f9fa);
+    color: var(--text-main);
+    font-size: 0.9rem;
+    outline: none;
+    cursor: pointer;
+}
+
+.dropdownArrow {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+}
+
+.dropdownMenu {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    width: 100%;
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 105;
+}
+
+.dropdownItem {
+    padding: 0.6rem 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--text-main);
+}
+
+.dropdownItem:hover {
+    background-color: var(--bg-hover, #f8f9fa);
+}
+
+.dropdownItem input[type="checkbox"] {
+    cursor: pointer;
+}
+
+/* Selected Pills */
+.selectedChipsContainer {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
 }
 
-.chip {
-    padding: 0.4rem 0.8rem;
-    border-radius: 20px;
-    border: 1px solid var(--border);
-    background-color: var(--background);
-    color: var(--text-secondary);
-    font-size: 0.85rem;
+.selectedChip {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    background-color: rgba(var(--primary-rgb, 13, 110, 253), 0.1);
+    color: var(--primary);
+    border: 1px solid rgba(var(--primary-rgb, 13, 110, 253), 0.2);
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.removeChipBtn {
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-size: 1.1rem;
+    line-height: 1;
     cursor: pointer;
-    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
 }
 
-.chip:hover {
-    border-color: var(--primary);
-}
-
-.chipSelected {
-    background-color: var(--primary);
-    color: white;
-    border-color: var(--primary);
+.removeChipBtn:hover {
+    color: var(--danger, #dc3545);
 }
 
 /* Select */

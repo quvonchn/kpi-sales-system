@@ -33,8 +33,8 @@ export default function KPIPieChart({ sales }: KPIPieChartProps) {
         return () => observer.disconnect();
     }, []);
 
-    // Filter only confirmed sales
-    const confirmedSales = sales.filter(s => s.status === 'tasdiqlandi');
+    // Filter only confirmed sales (case-insensitive)
+    const confirmedSales = sales.filter(s => s.status?.toLowerCase().trim() === 'tasdiqlandi');
 
     if (confirmedSales.length === 0) {
         return (

@@ -8,10 +8,6 @@ export default function RamadanBanner() {
     const [isAnimating, setIsAnimating] = useState(false);
 
     useEffect(() => {
-        const dismissed = localStorage.getItem('ramadan_banner_dismissed');
-        if (dismissed) {
-            setIsVisible(false);
-        }
         // Trigger entrance animation
         setTimeout(() => setIsAnimating(true), 100);
     }, []);
@@ -20,7 +16,6 @@ export default function RamadanBanner() {
         setIsAnimating(false);
         setTimeout(() => {
             setIsVisible(false);
-            localStorage.setItem('ramadan_banner_dismissed', 'true');
         }, 300);
     };
 

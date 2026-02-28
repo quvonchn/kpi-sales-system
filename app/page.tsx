@@ -37,7 +37,7 @@ export default function Home() {
       try {
         const operator = localStorage.getItem('operator');
 
-        if (operator?.toLowerCase() === 'admin') {
+        if (operator?.trim().toLowerCase() === 'admin') {
           router.push('/admin');
           return;
         }

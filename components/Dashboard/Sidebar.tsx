@@ -14,7 +14,7 @@ export default function Sidebar() {
 
     React.useEffect(() => {
         const operator = localStorage.getItem('operator');
-        setIsAdmin(operator?.toLowerCase() === 'admin');
+        setIsAdmin(operator?.trim().toLowerCase() === 'admin');
     }, []);
 
     const handleLogout = () => {

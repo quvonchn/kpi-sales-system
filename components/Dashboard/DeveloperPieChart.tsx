@@ -17,22 +17,12 @@ export default function DeveloperPieChart({ sales }: DeveloperPieChartProps) {
     const chartRef = React.useRef<HTMLDivElement>(null);
 
     React.useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.intersectionRatio >= 0.2) {
-                    setIsVisible(true);
-                }
-            },
-            {
-                threshold: [0.2, 0.5, 1.0]
-            }
-        );
+        // Ensure chart always animates in regardless of scroll position
+        const timer = setTimeout(() => {
+            setIsVisible(true);
+        }, 100);
 
-        if (chartRef.current) {
-            observer.observe(chartRef.current);
-        }
-
-        return () => observer.disconnect();
+        return () => clearTimeout(timer);
     }, []);
 
     // Filter only confirmed sales for KPI calculation

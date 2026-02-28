@@ -12,10 +12,13 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ error: 'Operator not specified' }, { status: 400 });
         }
 
+        // If "all" is passed (for admins), treat it as undefined to get everyone's sales
+        const targetOperator = operator.toLowerCase() === 'all' ? undefined : operator;
+
         const month = monthParam ? parseInt(monthParam) : undefined;
         const year = yearParam ? parseInt(yearParam) : undefined;
 
-        const sales = await getSalesByMonth(operator, month, year);
+        const sales = await getSalesByMonth(targetOperator, month, year);
 
         return NextResponse.json({ sales });
     } catch (error) {

@@ -8,10 +8,12 @@ import Header from '@/components/Dashboard/Header';
 import AuthGuard from '@/components/Auth/AuthGuard';
 import MonthFilter from '@/components/Dashboard/MonthFilter';
 import SalesHistoryTable from '@/components/Dashboard/SalesHistoryTable';
+import AdminSalesHistoryTable from '@/components/Dashboard/AdminSalesHistoryTable';
 import KPIPieChart from '@/components/Dashboard/KPIPieChart';
 
 interface Sale {
     id: string;
+    operator: string;
     amount: number;
     product: string;
     time: string;
@@ -33,14 +35,20 @@ export default function HistoryPage() {
     const [loading, setLoading] = useState(true);
     const [selectedMonth, setSelectedMonth] = useState(currentMonth);
     const [selectedYear] = useState(currentYear);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
         async function fetchData() {
             setLoading(true);
             try {
                 const operator = localStorage.getItem('operator');
+                const isUserAdmin = operator?.trim().toLowerCase() === 'admin';
+                setIsAdmin(isUserAdmin);
+
+                const targetOperator = isUserAdmin ? 'all' : operator;
+
                 const response = await fetch(
-                    `/api/sales/history?operator=${operator}&month=${selectedMonth}&year=${selectedYear}`
+                    `/api/sales/history?operator=${targetOperator}&month=${selectedMonth}&year=${selectedYear}`
                 );
                 const data = await response.json();
                 setSales(data.sales || []);
@@ -92,7 +100,11 @@ export default function HistoryPage() {
                             </div>
                         ) : (
                             <section className={styles.contentRow}>
-                                <SalesHistoryTable sales={sales} />
+                                {isAdmin ? (
+                                    <AdminSalesHistoryTable sales={sales} />
+                                ) : (
+                                    <SalesHistoryTable sales={sales} />
+                                )}
                                 <KPIPieChart sales={sales} />
                             </section>
                         )}

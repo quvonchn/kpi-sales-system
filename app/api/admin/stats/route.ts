@@ -1,25 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getTodaySalesFromSheets } from '@/lib/sheets/sheets';
+import { getTodaySalesFromSheets, getSalesByMonth, SheetSale } from '@/lib/sheets/sheets';
 import { getOperators } from '@/lib/auth/operators';
 import { calculateCommission } from '@/utils/commission';
 
 export async function GET(request: NextRequest) {
     try {
+        const { searchParams } = new URL(request.url);
+        const month = searchParams.get('month') ? parseInt(searchParams.get('month')!) : undefined;
+        const year = searchParams.get('year') ? parseInt(searchParams.get('year')!) : undefined;
+
         const operators = await getOperators();
 
-        // Fetch ALL sales for the current month instead of per-operator
-        // This ensures totals include sales from unknown operators too
-        const allSheetSales = await getTodaySalesFromSheets(); // Empty arg = all operators
+        // Fetch sales based on filter or current month
+        let allSheetSales;
+        if (month !== undefined || year !== undefined) {
+            allSheetSales = await getSalesByMonth(undefined, month, year);
+        } else {
+            allSheetSales = await getTodaySalesFromSheets(); // Empty arg = all operators
+        }
 
         // Only count 'tasdiqlandi'
-        const confirmedSales = allSheetSales.filter(sale => sale.status === 'tasdiqlandi');
+        const confirmedSales = allSheetSales.filter((sale: SheetSale) => sale.status === 'tasdiqlandi');
 
         const operatorStats = operators.map(op => {
-            const opSales = confirmedSales.filter(s =>
+            const opSales = confirmedSales.filter((s: SheetSale) =>
                 s.operator.toLowerCase().trim() === op.name.toLowerCase().trim()
             );
 
-            const totalRevenue = opSales.reduce((sum, s) => sum + s.amount, 0);
+            const totalRevenue = opSales.reduce((sum: number, s: SheetSale) => sum + s.amount, 0);
             const commission = calculateCommission(opSales.length, totalRevenue);
 
             return {
@@ -39,13 +47,13 @@ export async function GET(request: NextRequest) {
         const totals = {
             totalOperators: operators.length,
             totalSales: confirmedSales.length,
-            totalRevenue: confirmedSales.reduce((sum, s) => sum + s.amount, 0),
-            totalCommission: confirmedSales.reduce((sum, s) => {
+            totalRevenue: confirmedSales.reduce((sum: number, s: SheetSale) => sum + s.amount, 0),
+            totalCommission: confirmedSales.reduce((sum: number, s: SheetSale) => {
                 // For totals, we should ideally re-calculate commission based on the TOTAL context
                 // but usually, it's just a sum of individual commissions.
                 // However, sum of op.commissionAmount only works if we know all operators.
                 // Let's recalculate based on the sum of amounts if we want to be safe.
-                const opSalesGroup = confirmedSales.filter(cs => cs.operator === s.operator);
+                const opSalesGroup = confirmedSales.filter((cs: SheetSale) => cs.operator === s.operator);
                 return sum; // Fallback to a better way below
             }, 0),
         };
@@ -54,7 +62,7 @@ export async function GET(request: NextRequest) {
         // We need to sum up commissions for EACH operator (even unknown ones)
         // using the same logic.
         const operatorGroups: Record<string, { count: number, rev: number }> = {};
-        confirmedSales.forEach(s => {
+        confirmedSales.forEach((s: SheetSale) => {
             const op = s.operator || "Unknown";
             if (!operatorGroups[op]) operatorGroups[op] = { count: 0, rev: 0 };
             operatorGroups[op].count++;

@@ -113,7 +113,7 @@ export default function RankingPage() {
                 <main className={styles.main}>
                     <Header />
                     <div className={styles.header}>
-                        <div>
+                        <div className={styles.titleSection}>
                             <h1>Operatorlar Reytingi</h1>
                             <p>Eng yaxshi natija ko'rsatayotgan hamkasblarimiz</p>
                         </div>

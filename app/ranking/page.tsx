@@ -56,15 +56,23 @@ export default function RankingPage() {
         fetchStats(filterMonth);
     }, [filterMonth]);
 
-    const handleApplyFilters = (filters: { month?: number; operators: string[] }) => {
+    const handleApplyFilters = (filters: { month?: number; sortBy: 'kpi' | 'sales' }) => {
         setFilterMonth(filters.month);
-        setSelectedOps(filters.operators);
+        setSortBy(filters.sortBy);
     };
 
-    // Filter by operator names
-    const filteredByOps = selectedOps.length > 0
-        ? operators.filter(op => selectedOps.includes(op.name))
-        : operators;
+    // Filter by operator names - Removed as per instruction
+    // const filteredByOps = selectedOps.length > 0
+    //     ? operators.filter(op => selectedOps.includes(op.name))
+    //     : operators;
+
+    const sortedOperators = [...operators].sort((a, b) => {
+        if (sortBy === 'kpi') {
+            return b.commissionAmount - a.commissionAmount;
+        } else {
+            return b.salesCount - a.salesCount;
+        }
+    });
 
     const handleRowClick = async (operatorName: string) => {
         if (!isAdmin) return;
@@ -85,14 +93,6 @@ export default function RankingPage() {
             setLoadingSales(false);
         }
     };
-
-    const sortedOperators = [...filteredByOps].sort((a, b) => {
-        if (sortBy === 'kpi') {
-            return b.commissionAmount - a.commissionAmount;
-        } else {
-            return b.salesCount - a.salesCount;
-        }
-    });
 
     const formatCurrency = (amount: number) => {
         return new Intl.NumberFormat('uz-UZ', {
@@ -120,23 +120,9 @@ export default function RankingPage() {
 
                         <div className={styles.controls}>
                             <AdminFilter
-                                availableOperators={operators.map(op => op.name)}
                                 onApply={handleApplyFilters}
-                                initialFilters={{ month: filterMonth, operators: selectedOps }}
+                                initialFilters={{ month: filterMonth, sortBy: sortBy }}
                             />
-
-                            <div className={styles.filterGroup}>
-                                <label htmlFor="sort">Saralash:</label>
-                                <select
-                                    id="sort"
-                                    value={sortBy}
-                                    onChange={(e) => setSortBy(e.target.value as 'kpi' | 'sales')}
-                                    className={styles.select}
-                                >
-                                    <option value="sales">Sotuvlar soni</option>
-                                    <option value="kpi">KPI summasi</option>
-                                </select>
-                            </div>
                         </div>
                     </div>
 

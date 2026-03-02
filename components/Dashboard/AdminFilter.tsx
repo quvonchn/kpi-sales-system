@@ -4,9 +4,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import styles from './AdminFilter.module.css';
 
 interface AdminFilterProps {
-    availableOperators: string[];
-    onApply: (filters: { month?: number; operators: string[] }) => void;
-    initialFilters?: { month?: number; operators: string[] };
+    onApply: (filters: { month?: number; sortBy: 'kpi' | 'sales' }) => void;
+    initialFilters: { month?: number; sortBy: 'kpi' | 'sales' };
 }
 
 const MONTHS = [
@@ -24,14 +23,13 @@ const MONTHS = [
     { id: 12, name: 'Dekabr' },
 ];
 
-export default function AdminFilter({ availableOperators, onApply, initialFilters }: AdminFilterProps) {
+export default function AdminFilter({ onApply, initialFilters }: AdminFilterProps) {
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedMonth, setSelectedMonth] = useState<number | undefined>(initialFilters?.month);
-    const [selectedOps, setSelectedOps] = useState<string[]>(initialFilters?.operators || []);
+    const [selectedMonth, setSelectedMonth] = useState<number | undefined>(initialFilters.month);
+    const [selectedSort, setSelectedSort] = useState<'kpi' | 'sales'>(initialFilters.sortBy || 'kpi');
     const popoverRef = useRef<HTMLDivElement>(null);
 
-    const today = new Date();
-    const currentMonth = today.getMonth() + 1;
+    const currentMonth = new Date().getMonth() + 1;
 
     // Handle outside click
     useEffect(() => {
@@ -46,37 +44,26 @@ export default function AdminFilter({ availableOperators, onApply, initialFilter
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isOpen]);
 
-    const handleMonthToggle = (monthId: number) => {
-        setSelectedMonth(prev => prev === monthId ? undefined : monthId);
-    };
-
-    const handleOpToggle = (op: string) => {
-        setSelectedOps(prev =>
-            prev.includes(op)
-                ? prev.filter(o => o !== op)
-                : [...prev, op]
-        );
-    };
-
     const handleApply = () => {
-        onApply({ month: selectedMonth, operators: selectedOps });
+        onApply({ month: selectedMonth, sortBy: selectedSort });
         setIsOpen(false);
     };
 
     const handleClear = () => {
-        setSelectedMonth(undefined);
-        setSelectedOps([]);
-        onApply({ operators: [] });
+        setSelectedMonth(initialFilters.month);
+        setSelectedSort(initialFilters.sortBy);
+        onApply({ month: undefined, sortBy: initialFilters.sortBy });
+        setIsOpen(false);
     };
 
-    const activeCount = (selectedMonth ? 1 : 0) + (selectedOps.length > 0 ? 1 : 0);
+    const activeCount = (selectedMonth ? 1 : 0) + (selectedSort !== initialFilters.sortBy ? 1 : 0);
 
     return (
         <div className={styles.container} ref={popoverRef}>
             <button
                 className={`${styles.filterTrigger} ${activeCount > 0 ? styles.activeTrigger : ''}`}
                 onClick={() => setIsOpen(!isOpen)}
-                title="Filtrlash"
+                title="Filtrlash va Saralash"
             >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
@@ -105,16 +92,14 @@ export default function AdminFilter({ availableOperators, onApply, initialFilter
                     </div>
 
                     <div className={styles.section}>
-                        <span className={styles.sectionLabel}>Operatorni tanlang</span>
+                        <span className={styles.sectionLabel}>Saralash</span>
                         <select
                             className={styles.select}
-                            value={selectedOps.length === 1 ? selectedOps[0] : ''}
-                            onChange={(e) => setSelectedOps(e.target.value ? [e.target.value] : [])}
+                            value={selectedSort}
+                            onChange={(e) => setSelectedSort(e.target.value as 'kpi' | 'sales')}
                         >
-                            <option value="">Barcha operatorlar</option>
-                            {availableOperators.map(op => (
-                                <option key={op} value={op}>{op}</option>
-                            ))}
+                            <option value="kpi">KPI summasi bo'yicha</option>
+                            <option value="sales">Sotuvlar soni bo'yicha</option>
                         </select>
                     </div>
 

@@ -1,27 +1,40 @@
 .container {
     position: relative;
-    display: inline-block;
+    width: 100%;
+    max-width: 300px;
+}
+
+.label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
 }
 
 .filterTrigger {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.75rem 1rem;
     background-color: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 0.75rem;
     color: var(--text-main);
-    font-size: 0.875rem;
-    font-weight: 600;
+    font-size: 1rem;
+    font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .filterTrigger:hover {
     border-color: var(--primary);
-    background-color: var(--background);
+}
+
+.chevron {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
 }
 
 .activeTrigger {
@@ -45,8 +58,8 @@
 
 .popover {
     position: absolute;
-    top: calc(100% + 0.75rem);
-    right: 0;
+    top: calc(100% + 0.5rem);
+    left: 0;
     width: 380px;
     background-color: var(--card-bg);
     border: 1px solid var(--border);

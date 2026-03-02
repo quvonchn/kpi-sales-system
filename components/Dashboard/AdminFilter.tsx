@@ -73,15 +73,19 @@ export default function AdminFilter({ availableOperators, onApply, initialFilter
 
     return (
         <div className={styles.container} ref={popoverRef}>
+            <span className={styles.label}>Operatorlar</span>
             <button
                 className={`${styles.filterTrigger} ${activeCount > 0 ? styles.activeTrigger : ''}`}
                 onClick={() => setIsOpen(!isOpen)}
             >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-                </svg>
-                <span>Filtrlar</span>
-                {activeCount > 0 && <span className={styles.badge}>{activeCount}</span>}
+                <span>
+                    {selectedOps.length === 0
+                        ? 'Barchasi'
+                        : `${selectedOps.length} ta operator tanlandi`
+                    }
+                    {selectedMonth && ` (${MONTHS.find(m => m.id === selectedMonth)?.name})`}
+                </span>
+                <span className={styles.chevron}>▼</span>
             </button>
 
             {isOpen && (

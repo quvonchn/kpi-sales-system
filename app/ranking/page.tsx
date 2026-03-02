@@ -6,13 +6,13 @@ import Sidebar from '@/components/Dashboard/Sidebar';
 import Header from '@/components/Dashboard/Header';
 import AuthGuard from '@/components/Auth/AuthGuard';
 import OperatorSalesModal from '@/components/Dashboard/OperatorSalesModal';
+import AdminFilter from '@/components/Dashboard/AdminFilter';
 
 interface OperatorStat {
     name: string;
     email: string;
     salesCount: number;
     totalRevenue: number;
-    commissionRate: number;
     commissionAmount: number;
 }
 
@@ -22,11 +22,29 @@ export default function RankingPage() {
     const [sortBy, setSortBy] = useState<'kpi' | 'sales'>('kpi');
     const [isAdmin, setIsAdmin] = useState(false);
 
+    // Filter State
+    const [filterMonth, setFilterMonth] = useState<number | undefined>(undefined);
+    const [selectedOps, setSelectedOps] = useState<string[]>([]);
+
     // Modal state
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedOperator, setSelectedOperator] = useState<string | null>(null);
     const [operatorSales, setOperatorSales] = useState<any[]>([]);
     const [loadingSales, setLoadingSales] = useState(false);
+
+    async function fetchStats(month?: number) {
+        setLoading(true);
+        try {
+            const query = month ? `?month=${month}` : '';
+            const response = await fetch(`/api/admin/stats${query}`);
+            const data = await response.json();
+            setOperators(data.operators || []);
+        } catch (error) {
+            console.error('Error fetching stats:', error);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     useEffect(() => {
         const checkAdmin = () => {
@@ -34,21 +52,14 @@ export default function RankingPage() {
             setIsAdmin(operator?.trim().toLowerCase() === 'admin');
         };
 
-        async function fetchStats() {
-            try {
-                const response = await fetch('/api/admin/stats');
-                const data = await response.json();
-                setOperators(data.operators || []);
-            } catch (error) {
-                console.error('Error fetching stats:', error);
-            } finally {
-                setLoading(false);
-            }
-        }
-
         checkAdmin();
-        fetchStats();
-    }, []);
+        fetchStats(filterMonth);
+    }, [filterMonth]);
+
+    const handleApplyFilters = (filters: { month?: number; operators: string[] }) => {
+        setFilterMonth(filters.month);
+        setSelectedOps(filters.operators);
+    };
 
     const handleRowClick = async (operatorName: string) => {
         if (!isAdmin) return;
@@ -101,6 +112,15 @@ export default function RankingPage() {
                             <h1>Operatorlar Reytingi</h1>
                             <p>Eng yaxshi natija ko'rsatayotgan hamkasblarimiz</p>
                         </div>
+
+                        {isAdmin && (
+                            <AdminFilter
+                                availableOperators={operators.map(op => op.name)}
+                                onApply={handleApplyFilters}
+                                initialFilters={{ month: filterMonth, operators: selectedOps }}
+                            />
+                        )}
+
                         <div className={styles.filterGroup}>
                             <label htmlFor="sort">Saralash:</label>
                             <select

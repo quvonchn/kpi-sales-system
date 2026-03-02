@@ -28,27 +28,7 @@ export default function AdminPage() {
     const [totals, setTotals] = useState<Totals | null>(null);
     const [loading, setLoading] = useState(true);
     const [sortBy, setSortBy] = useState<'revenue' | 'sales'>('revenue');
-
-    // Filter State
-    const [filterMonth, setFilterMonth] = useState<number | undefined>(undefined);
-    const [selectedOps, setSelectedOps] = useState<string[]>([]);
-
     const router = useRouter();
-
-    async function fetchStats(month?: number) {
-        setLoading(true);
-        try {
-            const query = month ? `?month=${month}` : '';
-            const response = await fetch(`/api/admin/stats${query}`);
-            const data = await response.json();
-            setOperators(data.operators || []);
-            setTotals(data.totals || null);
-        } catch (error) {
-            console.error('Error fetching admin stats:', error);
-        } finally {
-            setLoading(false);
-        }
-    }
 
     useEffect(() => {
         // Check if user is admin
@@ -58,20 +38,24 @@ export default function AdminPage() {
             return;
         }
 
-        fetchStats(filterMonth);
-    }, [router, filterMonth]);
+        async function fetchStats() {
+            setLoading(true);
+            try {
+                const response = await fetch('/api/admin/stats');
+                const data = await response.json();
+                setOperators(data.operators || []);
+                setTotals(data.totals || null);
+            } catch (error) {
+                console.error('Error fetching admin stats:', error);
+            } finally {
+                setLoading(false);
+            }
+        }
 
-    const handleApplyFilters = (filters: { month?: number; operators: string[] }) => {
-        setFilterMonth(filters.month);
-        setSelectedOps(filters.operators);
-    };
+        fetchStats();
+    }, [router]);
 
-    // Filter by operator names if any selected
-    const filteredByOps = selectedOps.length > 0
-        ? operators.filter(op => selectedOps.includes(op.name))
-        : operators;
-
-    const sortedOperators = [...filteredByOps].sort((a, b) => {
+    const sortedOperators = [...operators].sort((a, b) => {
         if (sortBy === 'revenue') {
             return b.totalRevenue - a.totalRevenue;
         } else {
@@ -96,15 +80,8 @@ export default function AdminPage() {
             <Sidebar />
             <main className={styles.main}>
                 <div className={styles.header}>
-                    <div>
-                        <h1>Admin Panel</h1>
-                        <p>Barcha operatorlar statistikasi</p>
-                    </div>
-                    <AdminFilter
-                        availableOperators={operators.map(op => op.name)}
-                        onApply={handleApplyFilters}
-                        initialFilters={{ month: filterMonth, operators: selectedOps }}
-                    />
+                    <h1>Admin Panel</h1>
+                    <p>Barcha operatorlar statistikasi</p>
                 </div>
 
                 {/* Summary Cards */}

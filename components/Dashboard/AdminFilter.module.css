@@ -1,73 +1,47 @@
 .container {
     position: relative;
-    width: 100%;
-    max-width: 300px;
-}
-
-.label {
-    display: block;
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--text-main);
-    margin-bottom: 0.5rem;
+    display: inline-block;
 }
 
 .filterTrigger {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 0.75rem 1rem;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
     background-color: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 0.75rem;
     color: var(--text-main);
-    font-size: 1rem;
-    font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .filterTrigger:hover {
     border-color: var(--primary);
-}
-
-.chevron {
-    color: var(--text-secondary);
-    font-size: 0.8rem;
+    background-color: var(--background);
+    color: var(--primary);
 }
 
 .activeTrigger {
     border-color: var(--primary);
-    color: var(--primary);
     background-color: rgba(var(--primary-rgb), 0.05);
-}
-
-.badge {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--primary);
-    color: white;
-    font-size: 0.7rem;
-    min-width: 18px;
-    height: 18px;
-    border-radius: 9px;
-    padding: 0 4px;
+    color: var(--primary);
 }
 
 .popover {
     position: absolute;
-    top: calc(100% + 0.5rem);
+    top: calc(100% + 0.75rem);
     left: 0;
-    width: 380px;
-    background-color: var(--card-bg);
+    width: 320px;
+    background-color: #ffffff;
     border: 1px solid var(--border);
-    border-radius: 1rem;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    z-index: 100;
+    border-radius: 1.25rem;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
     padding: 1.5rem;
-    animation: slideIn 0.2s ease-out;
+    animation: slideIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes slideIn {
@@ -83,76 +57,79 @@
 }
 
 .section {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
 }
 
-.sectionTitle {
+.sectionLabel {
     display: block;
-    font-size: 0.875rem;
+    font-size: 0.85rem;
     font-weight: 700;
-    color: var(--text-main);
-    margin-bottom: 0.75rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
-.chipGrid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
-
-.chip {
-    padding: 0.4rem 0.8rem;
+.select {
+    width: 100%;
+    padding: 0.75rem 1rem;
     background-color: var(--background);
     border: 1px solid var(--border);
-    border-radius: 2rem;
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--text-secondary);
+    border-radius: 0.75rem;
+    font-size: 0.95rem;
+    color: var(--text-main);
     cursor: pointer;
-    transition: all 0.2s ease;
+    outline: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
 }
 
-.chip:hover {
+.select:focus {
     border-color: var(--primary);
-    color: var(--primary);
-}
-
-.selectedChip {
-    background-color: var(--primary);
-    border-color: var(--primary);
-    color: white;
+    box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.1);
 }
 
 .footer {
     display: flex;
-    justify-content: flex-end;
     gap: 0.75rem;
-    margin-top: 1rem;
-    padding-top: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
     border-top: 1px solid var(--border);
 }
 
 .btnApply {
-    padding: 0.5rem 1.25rem;
+    flex: 2;
+    padding: 0.75rem;
     background-color: var(--primary);
     color: white;
     border: none;
-    border-radius: 0.5rem;
-    font-weight: 600;
+    border-radius: 0.75rem;
+    font-weight: 700;
     cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btnApply:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
 }
 
 .btnClear {
-    padding: 0.5rem 1.25rem;
-    background: none;
+    flex: 1;
+    padding: 0.75rem;
+    background-color: var(--background);
     border: 1px solid var(--border);
-    border-radius: 0.5rem;
+    border-radius: 0.75rem;
     color: var(--text-secondary);
     font-weight: 600;
     cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 .btnClear:hover {
-    background-color: var(--background);
+    background-color: var(--border);
     color: var(--text-main);
 }

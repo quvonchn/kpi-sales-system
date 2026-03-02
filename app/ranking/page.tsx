@@ -113,30 +113,18 @@ export default function RankingPage() {
                 <main className={styles.main}>
                     <Header />
                     <div className={styles.header}>
-                        <div>
-                            <h1>Operatorlar Reytingi</h1>
-                            <p>Eng yaxshi natija ko'rsatayotgan hamkasblarimiz</p>
-                        </div>
-
-                        {isAdmin && (
-                            <AdminFilter
-                                availableOperators={operators.map(op => op.name)}
-                                onApply={handleApplyFilters}
-                                initialFilters={{ month: filterMonth, operators: selectedOps }}
-                            />
-                        )}
-
-                        <div className={styles.filterGroup}>
-                            <label htmlFor="sort">Saralash:</label>
-                            <select
-                                id="sort"
-                                value={sortBy}
-                                onChange={(e) => setSortBy(e.target.value as 'kpi' | 'sales')}
-                                className={styles.select}
-                            >
-                                <option value="sales">Sotuvlar soni bo'yicha</option>
-                                <option value="kpi">KPI summasi bo'yicha</option>
-                            </select>
+                        <div className={styles.titleSection}>
+                            {isAdmin && (
+                                <AdminFilter
+                                    availableOperators={operators.map(op => op.name)}
+                                    onApply={handleApplyFilters}
+                                    initialFilters={{ month: filterMonth, operators: selectedOps }}
+                                />
+                            )}
+                            <div>
+                                <h1>Operatorlar Reytingi</h1>
+                                <p>Eng yaxshi natija ko'rsatayotgan hamkasblarimiz</p>
+                            </div>
                         </div>
                     </div>
 

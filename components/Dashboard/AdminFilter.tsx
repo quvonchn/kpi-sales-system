@@ -73,59 +73,49 @@ export default function AdminFilter({ availableOperators, onApply, initialFilter
 
     return (
         <div className={styles.container} ref={popoverRef}>
-            <span className={styles.label}>Operatorlar</span>
             <button
                 className={`${styles.filterTrigger} ${activeCount > 0 ? styles.activeTrigger : ''}`}
                 onClick={() => setIsOpen(!isOpen)}
+                title="Filtrlash"
             >
-                <span>
-                    {selectedOps.length === 0
-                        ? 'Barchasi'
-                        : `${selectedOps.length} ta operator tanlandi`
-                    }
-                    {selectedMonth && ` (${MONTHS.find(m => m.id === selectedMonth)?.name})`}
-                </span>
-                <span className={styles.chevron}>▼</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                </svg>
             </button>
 
             {isOpen && (
                 <div className={styles.popover}>
                     <div className={styles.section}>
-                        <span className={styles.sectionTitle}>Oyni tanlang</span>
-                        <div className={styles.chipGrid}>
-                            {MONTHS.map(m => {
-                                const isFuture = m.id > currentMonth;
+                        <span className={styles.sectionLabel}>Oyni tanlang</span>
+                        <select
+                            className={styles.select}
+                            value={selectedMonth || ''}
+                            onChange={(e) => setSelectedMonth(e.target.value ? Number(e.target.value) : undefined)}
+                        >
+                            <option value="">Barcha oylar</option>
+                            {MONTHS.map(month => {
+                                const isFuture = month.id > currentMonth;
                                 return (
-                                    <button
-                                        key={m.id}
-                                        className={`${styles.chip} ${selectedMonth === m.id ? styles.selectedChip : ''}`}
-                                        onClick={() => handleMonthToggle(m.id)}
-                                        disabled={isFuture}
-                                        style={isFuture ? { opacity: 0.4, cursor: 'not-allowed' } : {}}
-                                    >
-                                        {m.name}
-                                    </button>
+                                    <option key={month.id} value={month.id} disabled={isFuture}>
+                                        {month.name}
+                                    </option>
                                 );
                             })}
-                        </div>
+                        </select>
                     </div>
 
                     <div className={styles.section}>
-                        <span className={styles.sectionTitle}>Operatorni tanlang</span>
-                        <div className={styles.chipGrid}>
+                        <span className={styles.sectionLabel}>Operatorni tanlang</span>
+                        <select
+                            className={styles.select}
+                            value={selectedOps.length === 1 ? selectedOps[0] : ''}
+                            onChange={(e) => setSelectedOps(e.target.value ? [e.target.value] : [])}
+                        >
+                            <option value="">Barcha operatorlar</option>
                             {availableOperators.map(op => (
-                                <button
-                                    key={op}
-                                    className={`${styles.chip} ${selectedOps.includes(op) ? styles.selectedChip : ''}`}
-                                    onClick={() => handleOpToggle(op)}
-                                >
-                                    {op}
-                                </button>
+                                <option key={op} value={op}>{op}</option>
                             ))}
-                            {availableOperators.length === 0 && (
-                                <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Operatorlar topilmadi</p>
-                            )}
-                        </div>
+                        </select>
                     </div>
 
                     <div className={styles.footer}>

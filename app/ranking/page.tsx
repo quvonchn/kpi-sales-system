@@ -61,6 +61,11 @@ export default function RankingPage() {
         setSelectedOps(filters.operators);
     };
 
+    // Filter by operator names
+    const filteredByOps = selectedOps.length > 0
+        ? operators.filter(op => selectedOps.includes(op.name))
+        : operators;
+
     const handleRowClick = async (operatorName: string) => {
         if (!isAdmin) return;
 
@@ -81,7 +86,7 @@ export default function RankingPage() {
         }
     };
 
-    const sortedOperators = [...operators].sort((a, b) => {
+    const sortedOperators = [...filteredByOps].sort((a, b) => {
         if (sortBy === 'kpi') {
             return b.commissionAmount - a.commissionAmount;
         } else {

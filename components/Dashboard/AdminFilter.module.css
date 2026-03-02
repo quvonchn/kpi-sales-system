@@ -34,6 +34,11 @@
     position: absolute;
     top: calc(100% + 12px);
     right: 0;
+    /* Align to the right edge of the container */
+    left: auto;
+    /* Remove any left alignment */
+    transform: none;
+    /* Remove centering transform */
     width: 280px;
     background-color: #fff;
     border: 1px solid var(--border);

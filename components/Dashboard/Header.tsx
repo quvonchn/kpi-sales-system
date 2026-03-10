@@ -12,6 +12,8 @@ export default function Header() {
     if (loading) return <div className={styles.header}>Yuklanmoqda...</div>;
 
     const displayName = operator || 'Mehmon';
+    const isAdmin = operator?.trim().toLowerCase() === 'admin';
+    const roleLabel = isAdmin ? 'Admin' : 'Operator';
 
     return (
         <header className={styles.header}>
@@ -49,8 +51,9 @@ export default function Header() {
             </div>
             <div className={styles.userProfile}>
                 <div className={styles.avatar}>{displayName.charAt(0).toUpperCase()}</div>
-                <span className={styles.operatorLabel}>Operator</span>
+                <span className={styles.operatorLabel}>{roleLabel}</span>
             </div>
         </header>
+
     );
 }

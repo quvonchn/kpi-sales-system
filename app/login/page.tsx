@@ -27,7 +27,6 @@ export default function LoginPage() {
             const data = await response.json();
 
             if (response.ok) {
-                localStorage.setItem('operator', username.trim());
                 setIsOpening(true);
 
                 setTimeout(() => {
@@ -36,6 +35,7 @@ export default function LoginPage() {
             } else {
                 setError(data.error || 'Login xato');
             }
+
         } catch (err) {
             setError('Serverda xatolik yuz berdi');
         } finally {
@@ -45,75 +45,7 @@ export default function LoginPage() {
 
     return (
         <div className={`${styles.container} ${isOpening ? styles.opening : ''}`}>
-            {/* Background Decorations */}
-            <div className={styles.floatingElements}>
-                {/* Big Premium Moon */}
-                <img
-                    src="/moon_premium.png"
-                    alt=""
-                    className={styles.moonPremium}
-                    draggable={false}
-                />
 
-                {/* Real Image Lanterns */}
-                <img
-                    src="/lantern_premium.png"
-                    alt=""
-                    className={`${styles.lantern} ${styles.lantern1}`}
-                    draggable={false}
-                />
-                <img
-                    src="/lantern_premium.png"
-                    alt=""
-                    className={`${styles.lantern} ${styles.lantern2}`}
-                    draggable={false}
-                />
-                <img
-                    src="/lantern_premium.png"
-                    alt=""
-                    className={`${styles.lantern} ${styles.lantern3}`}
-                    draggable={false}
-                />
-                <img
-                    src="/lantern_premium.png"
-                    alt=""
-                    className={`${styles.lantern} ${styles.lantern4}`}
-                    draggable={false}
-                />
-
-                {/* Sparkle particles */}
-                <div className={`${styles.sparkle} ${styles.sparkle1}`} />
-                <div className={`${styles.sparkle} ${styles.sparkle2}`} />
-                <div className={`${styles.sparkle} ${styles.sparkle3}`} />
-                <div className={`${styles.sparkle} ${styles.sparkle4}`} />
-                <div className={`${styles.sparkle} ${styles.sparkle5}`} />
-                <div className={`${styles.sparkle} ${styles.sparkle6}`} />
-                <div className={`${styles.sparkle} ${styles.sparkle7}`} />
-                <div className={`${styles.sparkle} ${styles.sparkle8}`} />
-
-                {/* Hanging small crescents */}
-                <div className={`${styles.hangingCrescent} ${styles.hangingCrescent1}`}>
-                    <svg width="20" height="45" viewBox="0 0 20 45" fill="none">
-                        <line x1="10" y1="0" x2="10" y2="20" stroke="rgba(255, 215, 0, 0.3)" strokeWidth="0.5" />
-                        <circle cx="10" cy="30" r="8" fill="rgba(255, 215, 0, 0.25)" />
-                        <circle cx="14" cy="27" r="6.5" fill="#0a1832" />
-                    </svg>
-                </div>
-                <div className={`${styles.hangingCrescent} ${styles.hangingCrescent2}`}>
-                    <svg width="16" height="35" viewBox="0 0 20 45" fill="none">
-                        <line x1="10" y1="0" x2="10" y2="20" stroke="rgba(255, 215, 0, 0.3)" strokeWidth="0.5" />
-                        <circle cx="10" cy="30" r="8" fill="rgba(255, 215, 0, 0.2)" />
-                        <circle cx="14" cy="27" r="6.5" fill="#0a1832" />
-                    </svg>
-                </div>
-                <div className={`${styles.hangingCrescent} ${styles.hangingCrescent3}`}>
-                    <svg width="18" height="40" viewBox="0 0 20 45" fill="none">
-                        <line x1="10" y1="0" x2="10" y2="20" stroke="rgba(255, 215, 0, 0.3)" strokeWidth="0.5" />
-                        <circle cx="10" cy="30" r="8" fill="rgba(255, 215, 0, 0.22)" />
-                        <circle cx="14" cy="27" r="6.5" fill="#0a1832" />
-                    </svg>
-                </div>
-            </div>
 
             {/* Login Card — with greeting INSIDE */}
             <div className={styles.loginCard}>
@@ -128,12 +60,7 @@ export default function LoginPage() {
                     <h1>UYSOT <span>KPI</span></h1>
                 </div>
 
-                {/* Ramadan Greeting — INSIDE card */}
-                <div className={styles.ramadanGreeting}>
-                    <p className={styles.greetingText}>
-                        ☪ Ramazon oyi muborak! ☪
-                    </p>
-                </div>
+
 
                 <h2 className={styles.title}>Tizimga Kirish</h2>
                 <p className={styles.subtitle}>Operator paneliga xush kelibsiz</p>

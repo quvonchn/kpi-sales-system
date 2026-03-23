@@ -14,6 +14,31 @@ export interface SheetSale {
     time: string;
 }
 
+export function normalizeDateStr(dateStr: string): string {
+    if (!dateStr) return '';
+    const dateOnly = dateStr.toString().trim().split(' ')[0];
+    
+    // Helper to format parts into YYYY-MM-DD
+    const formatParts = (parts: string[]) => {
+        const day = parts[0].padStart(2, '0');
+        const month = parts[1].padStart(2, '0');
+        const year = parts[2].length === 2 ? `20${parts[2]}` : parts[2];
+        return `${year}-${month}-${day}`;
+    };
+
+    if (dateOnly.includes('.')) {
+        const parts = dateOnly.split('.');
+        if (parts.length >= 3) return formatParts(parts);
+    }
+    
+    if (dateOnly.includes('/')) {
+        const parts = dateOnly.split('/');
+        if (parts.length >= 3) return formatParts(parts);
+    }
+
+    return dateOnly;
+}
+
 export async function getTodaySalesFromSheets(operatorName?: string): Promise<SheetSale[]> {
     if (!process.env.GOOGLE_SHEETS_CREDENTIALS || !process.env.GOOGLE_SHEET_ID) {
         console.warn("Google Sheets credentials missing. Returning empty array.");
@@ -50,11 +75,13 @@ export async function getTodaySalesFromSheets(operatorName?: string): Promise<Sh
         // Filter current month's sales and map to our format
         const sales: SheetSale[] = rows
             .filter((row) => {
-                const salesDate = row[2]; // Sales Date column (C)
-                if (!salesDate) return false;
+                const salesDateStr = row[2];
+                if (!salesDateStr) return false;
 
+                const normDate = normalizeDateStr(salesDateStr.toString());
+                
                 // Parse date (format: 2026-01-05)
-                const dateParts = salesDate.toString().split('-');
+                const dateParts = normDate.split('-');
                 if (dateParts.length < 2) return false;
 
                 const year = parseInt(dateParts[0]);
@@ -70,19 +97,18 @@ export async function getTodaySalesFromSheets(operatorName?: string): Promise<Sh
                 return isCurrentMonth && matchesOperator;
             })
             .map((row) => {
-                const salesDate = row[2] || '';
+                const salesDateStr = row[2] || '';
+                const normDate = normalizeDateStr(salesDateStr.toString());
                 const commission = row[3] || '0';
 
-                const displayDate = salesDate.includes(' ')
-                    ? salesDate.split(' ')[0]
-                    : salesDate;
+                const displayDate = normDate;
 
                 const commissionAmount = parseFloat(commission.toString().replace(/[^0-9.-]/g, '') || '0');
 
                 return {
                     id: (row[0] || 'N/A').toString(),
                     operator: (row[1] || 'Unknown').toString(),
-                    salesDate: salesDate.toString(),
+                    salesDate: normDate,
                     commission: commission.toString(),
                     quruvchi: (row[4] || '').toString(),
                     obyekt: (row[5] || 'Unknown Object').toString(),
@@ -100,16 +126,6 @@ export async function getTodaySalesFromSheets(operatorName?: string): Promise<Sh
         console.error("Google Sheets API Error:", error);
         return [];
     }
-}
-
-export async function getMonthlySalesCount(operatorName: string): Promise<number> {
-    const sales = await getTodaySalesFromSheets(operatorName);
-    return sales.length;
-}
-
-export async function getMonthlyCommission(operatorName: string): Promise<number> {
-    const sales = await getTodaySalesFromSheets(operatorName);
-    return sales.reduce((sum, sale) => sum + sale.amount, 0);
 }
 
 /**
@@ -152,10 +168,11 @@ export async function getSalesByMonth(
 
         const sales: SheetSale[] = rows
             .filter((row) => {
-                const salesDate = row[2];
-                if (!salesDate) return false;
+                const salesDateStr = row[2];
+                if (!salesDateStr) return false;
 
-                const dateParts = salesDate.toString().split('-');
+                const normDate = normalizeDateStr(salesDateStr.toString());
+                const dateParts = normDate.split('-');
                 if (dateParts.length < 2) return false;
 
                 const rowYear = parseInt(dateParts[0]);
@@ -169,19 +186,18 @@ export async function getSalesByMonth(
                 return matchesMonth && matchesOperator;
             })
             .map((row) => {
-                const salesDate = row[2] || '';
+                const salesDateStr = row[2] || '';
+                const normDate = normalizeDateStr(salesDateStr.toString());
                 const commission = row[3] || '0';
 
-                const displayDate = salesDate.includes(' ')
-                    ? salesDate.split(' ')[0]
-                    : salesDate;
+                const displayDate = normDate;
 
                 const commissionAmount = parseFloat(commission.toString().replace(/[^0-9.-]/g, '') || '0');
 
                 return {
                     id: (row[0] || 'N/A').toString(),
                     operator: (row[1] || 'Unknown').toString(),
-                    salesDate: salesDate.toString(),
+                    salesDate: normDate,
                     commission: commission.toString(),
                     quruvchi: (row[4] || '').toString(),
                     obyekt: (row[5] || 'Unknown Object').toString(),
@@ -244,9 +260,8 @@ export async function getSalesByDateRange(
                 const salesDateStr = row[2];
                 if (!salesDateStr) return false;
 
-                // Expected format from sheets might be DD-MM-YYYY or YYYY-MM-DD
-                // Let's try parsing it safely: Assuming format YYYY-MM-DD based on existing code `split('-')` and `rowYear = parseInt(dateParts[0])`
-                const salesDate = new Date(salesDateStr.toString());
+                const normDate = normalizeDateStr(salesDateStr.toString());
+                const salesDate = new Date(normDate);
 
                 // If date is invalid, don't include
                 if (isNaN(salesDate.getTime())) return false;
@@ -257,19 +272,18 @@ export async function getSalesByDateRange(
                 return true;
             })
             .map((row) => {
-                const salesDate = row[2] || '';
+                const salesDateStr = row[2] || '';
+                const normDate = normalizeDateStr(salesDateStr.toString());
                 const commission = row[3] || '0';
 
-                const displayDate = salesDate.includes(' ')
-                    ? salesDate.split(' ')[0]
-                    : salesDate;
+                const displayDate = normDate;
 
                 const commissionAmount = parseFloat(commission.toString().replace(/[^0-9.-]/g, '') || '0');
 
                 return {
                     id: (row[0] || 'N/A').toString(),
                     operator: (row[1] || 'Unknown').toString().trim(),
-                    salesDate: salesDate.toString(),
+                    salesDate: normDate,
                     commission: commission.toString(),
                     quruvchi: (row[4] || '').toString().trim(),
                     obyekt: (row[5] || 'Unknown Object').toString(),

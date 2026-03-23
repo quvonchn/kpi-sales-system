@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useAuth } from '@/lib/auth/useAuth';
 import styles from './ranking.module.css';
 import Sidebar from '@/components/Dashboard/Sidebar';
 import Header from '@/components/Dashboard/Header';
@@ -17,6 +18,7 @@ interface OperatorStat {
 }
 
 export default function RankingPage() {
+    const { operator, role } = useAuth();
     const [operators, setOperators] = useState<OperatorStat[]>([]);
     const [loading, setLoading] = useState(true);
     const [sortBy, setSortBy] = useState<'kpi' | 'sales'>('kpi');
@@ -47,14 +49,12 @@ export default function RankingPage() {
     }
 
     useEffect(() => {
-        const checkAdmin = () => {
-            const operator = localStorage.getItem('operator');
-            setIsAdmin(operator?.trim().toLowerCase() === 'admin');
-        };
+        setIsAdmin(role === 'admin');
+        if (operator) {
+            fetchStats(filterMonth);
+        }
+    }, [filterMonth, operator, role]);
 
-        checkAdmin();
-        fetchStats(filterMonth);
-    }, [filterMonth]);
 
     const handleApplyFilters = (filters: { month?: number; sortBy: 'kpi' | 'sales' }) => {
         setFilterMonth(filters.month);

@@ -8,13 +8,14 @@ import ProgressBar from '@/components/Motivational/ProgressBar';
 import RecentSales from '@/components/Dashboard/RecentSales';
 import AuthGuard from '@/components/Auth/AuthGuard';
 import UpsellCard from '@/components/Motivational/UpsellCard';
-import StatusPieChart from '@/components/Dashboard/StatusPieChart';
-import DeveloperPieChart from '@/components/Dashboard/DeveloperPieChart'; // Keeping for reference if needed elsewhere
-import RamadanBanner from '@/components/Dashboard/RamadanBanner';
+import DeveloperPieChart from '@/components/Dashboard/DeveloperPieChart';
+
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/lib/auth/useAuth';
 import { calculateCommission, CommissionResult } from '@/utils/commission';
+
 
 interface Sale {
   id: string;
@@ -26,22 +27,17 @@ interface Sale {
 }
 
 export default function Home() {
+  const { operator, role } = useAuth();
   const [salesData, setSalesData] = useState<Sale[]>([]);
   const [loading, setLoading] = useState(true);
   const [isUsingMock, setIsUsingMock] = useState(false);
-  const [statusFilter, setStatusFilter] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     async function fetchData() {
+      if (!operator) return;
+
       try {
-        const operator = localStorage.getItem('operator');
-
-        if (operator?.trim().toLowerCase() === 'admin') {
-          router.push('/admin');
-          return;
-        }
-
         const response = await fetch(`/api/sales?operator=${operator}`);
         const data = await response.json();
 
@@ -65,7 +61,8 @@ export default function Home() {
     }
 
     fetchData();
-  }, [router]);
+  }, [operator, role, router]);
+
 
   // KPI calculations MUST use only 'tasdiqlandi' sales
   const confirmedSales = salesData.filter(s => s.status === 'tasdiqlandi');
@@ -83,12 +80,6 @@ export default function Home() {
   const hypotheticalTotalRevenue = currentTotalRevenue * 1.5;
   const potentialShare = hypotheticalTotalRevenue * commissionData.commissionRate;
 
-  // Filtered sales for display in RecentSales
-  const displayedSales = statusFilter
-    ? salesData.filter(s => s.status === statusFilter)
-    : salesData;
-
-  const currentRatePercent = (commissionData.commissionRate * 100).toFixed(0) + '%';
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(amount);
   };
@@ -103,7 +94,7 @@ export default function Home() {
         <Sidebar />
         <main className={styles.main}>
           <Header />
-          <RamadanBanner />
+
 
           {isUsingMock && (
             <div style={{

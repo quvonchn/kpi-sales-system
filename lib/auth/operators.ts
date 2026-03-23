@@ -1,9 +1,11 @@
 import { google } from 'googleapis';
+import bcrypt from 'bcryptjs';
 
 export interface Operator {
     name: string;
     password: string;
     email?: string;
+    role?: 'admin' | 'operator';
 }
 
 export async function getOperators(): Promise<Operator[]> {
@@ -23,21 +25,28 @@ export async function getOperators(): Promise<Operator[]> {
         const sheets = google.sheets({ version: 'v4', auth });
 
         // Read from "Лист2" sheet (User's sheet for operators)
-        // Columns: A=Name, B=Password, C=Email (optional)
+        // Columns: A=Name, B=Password, C=Email, D=Role
         const response = await sheets.spreadsheets.values.get({
             spreadsheetId: process.env.GOOGLE_SHEET_ID,
-            range: 'Лист2!A2:C', // Assuming row 1 is headers
+            range: 'Лист2!A2:D', // Assuming row 1 is headers
         });
 
         const rows = response.data.values || [];
 
-        const operators: Operator[] = rows.map((row) => ({
-            name: (row[0] || '').toString().trim(),
-            password: (row[1] || '').toString().trim(),
-            email: (row[2] || '').toString().trim(),
-        }));
+        const operators: Operator[] = rows.map((row) => {
+            const name = (row[0] || '').toString().trim();
+            const role = (row[3] || 'operator').toString().trim().toLowerCase();
+            
+            return {
+                name,
+                password: (row[1] || '').toString().trim(),
+                email: (row[2] || '').toString().trim(),
+                role: (name.toLowerCase() === 'admin' ? 'admin' : role) as 'admin' | 'operator',
+            };
+        });
 
         return operators;
+
 
     } catch (error) {
         console.error("Error fetching operators:", error);
@@ -45,15 +54,31 @@ export async function getOperators(): Promise<Operator[]> {
     }
 }
 
-export async function validateOperator(name: string, password: string): Promise<boolean> {
+export async function validateOperator(name: string, password: string): Promise<Operator | null> {
     const operators = await getOperators();
     const targetName = name.toLowerCase().trim();
     const targetPassword = password.trim();
 
-    return operators.some(op =>
-        op.name.toLowerCase() === targetName &&
-        op.password === targetPassword
-    );
+    const operator = operators.find(op => op.name.toLowerCase() === targetName);
+    
+    if (!operator) return null;
+
+    // Check if the password is a hash (starts with $2a$ or $2b$)
+    const isHash = operator.password.startsWith('$2a$') || operator.password.startsWith('$2b$');
+
+    if (isHash) {
+        const isValid = await bcrypt.compare(targetPassword, operator.password);
+        return isValid ? operator : null;
+    } else {
+        // Fallback for plain-text passwords during migration
+        const isValid = operator.password === targetPassword;
+        if (isValid) {
+            // Auto-update to hash if possible
+            // updateOperatorPassword(operator.name, targetPassword);
+            return operator;
+        }
+        return null;
+    }
 }
 
 export async function updateOperatorPassword(name: string, newPassword: string): Promise<boolean> {
@@ -62,6 +87,7 @@ export async function updateOperatorPassword(name: string, newPassword: string):
     }
 
     try {
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
         const credentials = JSON.parse(process.env.GOOGLE_SHEETS_CREDENTIALS);
         const auth = new google.auth.GoogleAuth({
             credentials,
@@ -86,8 +112,6 @@ export async function updateOperatorPassword(name: string, newPassword: string):
         }
 
         // 2. Update the password cell (Column B = index 1)
-        // In Google Sheets API, range is 1-indexed, but rowIndex from findIndex is 0-indexed.
-        // So cell is B[rowIndex + 1]. 
         const range = `Лист2!B${rowIndex + 1}`;
 
         await sheets.spreadsheets.values.update({
@@ -95,7 +119,7 @@ export async function updateOperatorPassword(name: string, newPassword: string):
             range,
             valueInputOption: 'RAW',
             requestBody: {
-                values: [[newPassword]],
+                values: [[hashedPassword]],
             },
         });
 
@@ -105,3 +129,4 @@ export async function updateOperatorPassword(name: string, newPassword: string):
         return false;
     }
 }
+

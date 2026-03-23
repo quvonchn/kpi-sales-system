@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { validateOperator } from '@/lib/auth/operators';
+import { login as setAuthCookie } from '@/lib/auth/auth';
 
 export async function POST(request: NextRequest) {
     try {
@@ -12,10 +13,20 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const isValid = await validateOperator(username, password);
+        const operator = await validateOperator(username, password);
 
-        if (isValid) {
-            return NextResponse.json({ success: true, operator: username });
+        if (operator) {
+            // Set httpOnly cookie with JWT
+            await setAuthCookie({ 
+                name: operator.name, 
+                role: operator.role || 'operator' 
+            });
+
+            return NextResponse.json({ 
+                success: true, 
+                operator: operator.name,
+                role: operator.role || 'operator'
+            });
         } else {
             return NextResponse.json(
                 { error: 'Login yoki parol noto\'g\'ri' },
@@ -30,3 +41,4 @@ export async function POST(request: NextRequest) {
         );
     }
 }
+

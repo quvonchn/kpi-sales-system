@@ -3,24 +3,24 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { useAuth } from '@/lib/auth/useAuth';
 import styles from './Sidebar.module.css';
 import { useSidebar } from '@/context/SidebarContext';
 
 export default function Sidebar() {
     const pathname = usePathname();
-    const router = useRouter();
     const { isSidebarOpen, closeSidebar } = useSidebar();
+    const { role, logout } = useAuth();
     const [isAdmin, setIsAdmin] = React.useState(false);
 
     React.useEffect(() => {
-        const operator = localStorage.getItem('operator');
-        setIsAdmin(operator?.trim().toLowerCase() === 'admin');
-    }, []);
+        setIsAdmin(role === 'admin');
+    }, [role]);
 
     const handleLogout = () => {
-        localStorage.removeItem('operator');
-        router.push('/login');
+        logout();
     };
+
 
     return (
         <>

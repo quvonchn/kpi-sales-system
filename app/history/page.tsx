@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useAuth } from '@/lib/auth/useAuth';
 import styles from '../page.module.css';
 import historyStyles from './history.module.css';
 import Sidebar from '@/components/Dashboard/Sidebar';
@@ -28,6 +29,7 @@ const MONTH_NAMES = [
 ];
 
 export default function HistoryPage() {
+    const { operator, role } = useAuth();
     const today = new Date();
     const currentMonth = today.getMonth() + 1;
     const currentYear = today.getFullYear();
@@ -50,18 +52,13 @@ export default function HistoryPage() {
     const [availableBuilders, setAvailableBuilders] = useState<string[]>([]);
 
     useEffect(() => {
-        const checkAdmin = () => {
-            const operator = localStorage.getItem('operator');
-            setIsAdmin(operator?.trim().toLowerCase() === 'admin');
-            return operator;
-        };
-
-        const operator = checkAdmin();
+        setIsAdmin(role === 'admin');
 
         async function fetchData() {
+            if (!operator) return;
             setLoading(true);
             try {
-                if (operator?.trim().toLowerCase() === 'admin') {
+                if (role === 'admin') {
                     // Admin Fetch Logic
                     const params = new URLSearchParams();
                     if (adminFilters.startDate) params.append('startDate', adminFilters.startDate);
@@ -94,7 +91,8 @@ export default function HistoryPage() {
         }
 
         fetchData();
-    }, [selectedMonth, selectedYear, adminFilters]);
+    }, [selectedMonth, selectedYear, adminFilters, operator, role]);
+
 
     const handleMonthChange = (month: number) => {
         setSelectedMonth(month);

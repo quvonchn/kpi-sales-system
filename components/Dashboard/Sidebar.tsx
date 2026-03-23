@@ -42,7 +42,7 @@ export default function Sidebar() {
                 </div>
 
                 <nav className={styles.nav}>
-                    <Link href="/" className={`${styles.navItem} ${pathname === '/' ? styles.active : ''}`}>
+                    <Link href={isAdmin ? "/admin" : "/"} className={`${styles.navItem} ${pathname === (isAdmin ? "/admin" : "/") ? styles.active : ''}`}>
                         <span>🏠 Dashboard</span>
                     </Link>
                     <Link href="/history" className={`${styles.navItem} ${pathname === '/history' ? styles.active : ''}`}>

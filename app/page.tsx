@@ -34,6 +34,11 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
+    if (role === 'admin') {
+      router.push('/admin');
+      return;
+    }
+
     async function fetchData() {
       if (!operator) return;
 
@@ -84,7 +89,7 @@ export default function Home() {
     return new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(amount);
   };
 
-  if (loading) {
+  if (loading || role === 'admin') {
     return <div style={{ padding: '2rem', textAlign: 'center' }}>Yuklanmoqda...</div>;
   }
 

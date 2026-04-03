@@ -25,7 +25,7 @@ export default function RankingPage() {
     const [isAdmin, setIsAdmin] = useState(false);
 
     // Filter State
-    const [filterMonth, setFilterMonth] = useState<number | undefined>(undefined);
+    const [filterMonth, setFilterMonth] = useState<number | undefined>(new Date().getMonth() + 1);
     const [selectedOps, setSelectedOps] = useState<string[]>([]);
 
     // Modal state
@@ -134,7 +134,7 @@ export default function RankingPage() {
                                         <th>#</th>
                                         <th>Operator</th>
                                         <th>Sotuvlar soni</th>
-                                        <th>KPI summasi</th>
+                                        {isAdmin && <th>KPI summasi</th>}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -152,7 +152,7 @@ export default function RankingPage() {
                                             </td>
                                             <td className={styles.name}>{op.name}</td>
                                             <td className={styles.sales}>{op.salesCount}</td>
-                                            <td>{formatCurrency(op.commissionAmount)}</td>
+                                            {isAdmin && <td>{formatCurrency(op.commissionAmount)}</td>}
                                         </tr>
                                     ))}
                                     {operators.length === 0 && (

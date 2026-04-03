@@ -48,7 +48,10 @@ export default async function middleware(req: NextRequest) {
         
         // Admin API protection
         if (path.startsWith('/api/admin/') && session.role !== 'admin') {
-            return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+            // Exception: allow /api/admin/stats to be accessed by operators for ranking
+            if (!path.startsWith('/api/admin/stats')) {
+                return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+            }
         }
     }
 

@@ -1,0 +1,363 @@
+5 Avenue
+Абу-Даби
+Aero Town
+Akay City
+Al Barakat
+Al Qasr
+Al Xorazmiy
+Alandalus
+Albero Exclusive
+Almaz Tower
+Aman Residence
+Anor
+Anorzor
+Apelsin
+Aprel
+Aristocrat Home
+Askiya city
+Askiya city 2
+Assalom Boglar
+Assalom Chirchiq
+Assalom Do'stlik
+Assalom Dormon Yoli
+Assalom Havo
+Assalom Jomiy
+Assalom Maxtumquli
+Assalom Sohil
+Атмосфера
+Aura
+Aurum
+Baku Residence
+Bahorli residence
+Barhan residence
+Barocco
+Boulevard
+Bogi Shamol
+Bobur Elite
+Bobur Residence
+Boz Suv
+Bridge
+British House
+Bunyodobod
+Bunyodkor
+Бунёдкор
+Cambridge Residence Commercial
+Carat
+Center One
+Celebrity Residence
+Chaqar
+Chinor
+Chigatoy Farabi
+Choshtepa
+Choshtepa Garden
+Choshtepa Residence
+Chimgan
+Chimgan Hills
+Chimgan Plaza
+Chinaras
+Comfort House
+Чехова
+Daco Residence
+Darkhan Avenue
+Darhon Modern
+Davr Residence
+D Casa
+Depo Residence
+Diamond
+Diamond City
+Diamond Villa
+Diplomats Residence
+Дипломат
+Dombirobod City
+Dustlik
+Ducat
+Дворец
+Dreamland Aeroport
+Dreamland Dostlik
+Dreamland Parkent
+Edison
+Elite Complex
+Ellipse Garden Darhan
+Elman Plaza
+EM DER SAL
+Erus Empire
+Fayzli
+Fayzli Hayot
+Fazo
+Fazo Residence
+Felicita
+Feruza
+Flagman
+Fortaleza
+Furqat residence
+Gabus
+Gardens Residence
+Go'zal Saroy
+Golden Hills
+Golden Lake
+Goldstone
+Grand Akkurgan Resident
+Grand Muqimiy
+GRAND CITY
+Greenpark
+Green Island
+Green Park
+Greenwich
+Gulsanam
+Guncha Apartments
+Guncha Uylari
+Hamza
+Harizma
+Hayot
+Hi-Tech House
+Horizon House
+Humo
+Huvaydo
+Ibn Sino
+Ibn Sino Resedence
+Infinity
+Ipakchi
+Iqtidor Vilage
+Italiano Vero
+IZZAT
+Izmir
+Jangokh
+Jomiy
+Jomiy Residence
+Kalandar Elite
+Kamron Palace
+Karakamish Olimpiya
+Karakamish
+Karakamysh-2
+Kar Magnit
+Kazakhstan
+Каштан
+Kelajak
+Kiparis
+Kislorod
+Ko'kcha Darvoza
+Kompakt house
+Kompas
+Koshona
+Kushon
+Kushbegi
+Kushbegi Residence
+Labzak Park City
+Lafayette
+La Villa Green
+Legenda
+Limonaria
+Livingood
+London
+Loft Residence
+Lutfiy Garden
+Luxury House
+Majnuntol
+Maljaan Residence
+Malika
+Manhattan
+Manzara
+Marvarid
+Mashxadi Residence
+Mavsum
+Max Infinity
+Median Development
+Meridian
+Milano
+Milliy
+Minar
+Minerva City
+Minor
+Minor River
+Minor Towers
+Mirabad Avenue
+Mirabad Palace
+Mirabad Residence
+Mirzo Ulugbek
+Mirzo-Ulugbek
+Moderno
+Modern Tashkent
+MUFASSAL BUILDING
+MUHTASHAM
+Navroz
+Navroz residence
+Navbahor
+Nazar House
+Nasl Dahasi
+Neom Tower
+Neo House
+Neonit
+Nest One
+New Chinobod
+New House
+New House Yunusabad
+New Life
+New Life Darkhan
+New Mahal
+New National Way
+Nirvana Residence
+Nova Center
+Nova Garden
+NovaCenter II
+Novza
+Novza Residence
+NUR
+Nur Hayot
+Nurafshon Avenue
+Nurafshon Darvoza
+Salom Nurafshon
+Obinazir
+Obod Maskan
+Obod-Plaza
+Obi Hayot
+Ocean
+Oasis
+Olimp
+Olmazor Business City
+Olmazor Residence
+Olmos Residence
+Onix
+Oq Saroy
+Orzular
+Orzular Maskani
+Orzu Saroyi
+Oson Fayzli Hayot
+Oybek
+Oz Makon
+Oz Makon 2
+Oz Zamin
+Oz'Makon
+OzMahal
+Palazzo
+Parkent Avenue
+Parkent Plaza
+Park City Olmazor
+Park Residence
+Park House
+Parkwood
+Platinum House
+Poytaxt Residence
+Presstige
+Premier House
+Prestige Gardens
+Prime Residence
+Qorasuv
+Qorasuv Avenue
+Qorasuv Plaza
+Qorasuv Residence
+Qorasuv River Residence
+Qorasuv Sohil Boyi 2
+QORASAROY
+Qushbegi
+Rainbow City
+Ramazon
+Real City
+Regnum Plaza
+Renaissance
+Renomme
+Resim
+Residence
+Riverside
+Riverside Palace
+Riverside Residence
+River House
+River Park
+River soy
+River Soy
+Rohat
+Royal House
+Sabzavod
+Sagbon
+Salom
+Salom Qo'yliq
+Sarikul
+Sayram Elite
+Sayram Tower
+Sayram Village
+Seoul riverside
+Sergeli Elite
+Sergeli Mansion
+Shirin
+Shirin Hayot
+Shirin Residence
+Shinam
+Shirin
+Shoxsaroy Residence
+Silver
+Silver Tower
+Sky Builds
+Sokin House
+Sokin Hayot
+Sokin Sohil
+Sohil Boyi
+Solaris
+Somang
+Sofia 2
+Spektr
+Spetnik
+Star house residence
+Star House
+Status
+Sultania
+Sunrise
+Sugdiyona
+Sayt
+Tahoe
+Terminal
+Territoriya Group
+Tiara Residence
+TTZ
+Trinity
+Triumph Residence
+Triumf
+Toshkent plaza
+Trest House
+Tukimachi
+Uchtepa
+Uchtepa Garden
+Uchtepa Plaza
+UTOWER
+Usta Shirin
+Vatan Residence
+Vegas Tower
+Venera Residence
+Viennese waltz
+Vision
+Vodiy
+Wonderful City
+Wiston
+Western housing
+White Residence
+White House
+Yangi Ozbekiston
+Yangi Baxt
+Yangi Darhon
+Yangi Eshonguzar
+Yangi Hayot Residence
+Yangi Qoyliq
+Yangi Qoshnilar
+Yangi Sebzor
+Yangi Yashnobod
+Yaashnnobod Plaza
+Yangi Tashkent
+Yakkasaroy
+Yakkasaroy City Mall
+Yakkasaroy Palace
+Yakkasaroy Plaza
+Yaqinlar
+Yashnnobad Plaza
+Yashnobad Plaza
+Yulduz
+Yulduzi
+Yangiobod Residence
+Yangi Ozbekiston Massivi
+Zarafshan Сity
+Zarafshan City
+Zamin Great City
+Зamon
+Zamin
+Zenkov
+Zilan Residence
+Ziynat Capital
+Zorsan
+Zor San

@@ -134,7 +134,7 @@ export default function RankingPage() {
                                         <th>#</th>
                                         <th>Operator</th>
                                         <th>Sotuvlar soni</th>
-                                        {isAdmin && <th>KPI summasi</th>}
+                                        <th>KPI summasi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -152,7 +152,7 @@ export default function RankingPage() {
                                             </td>
                                             <td className={styles.name}>{op.name}</td>
                                             <td className={styles.sales}>{op.salesCount}</td>
-                                            {isAdmin && <td>{formatCurrency(op.commissionAmount)}</td>}
+                                            <td>{formatCurrency(op.commissionAmount)}</td>
                                         </tr>
                                     ))}
                                     {operators.length === 0 && (

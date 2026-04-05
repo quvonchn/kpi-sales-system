@@ -57,6 +57,11 @@ export default function Sidebar() {
                     <Link href="/kpi" className={`${styles.navItem} ${pathname === '/kpi' ? styles.active : ''}`}>
                         <span>📊 KPI Tafsilotlari</span>
                     </Link>
+                    {!isAdmin && (
+                        <Link href="/goals" className={`${styles.navItem} ${pathname === '/goals' ? styles.active : ''}`}>
+                            <span>🎯 Maqsadlarim</span>
+                        </Link>
+                    )}
                     {isAdmin && (
                         <Link href="/admin" className={`${styles.navItem} ${styles.adminLink} ${pathname === '/admin' ? styles.active : ''}`}>
                             <span>⚙️ Admin Panel</span>

@@ -9,10 +9,27 @@ export async function GET() {
         // 1. Filter only 'tasdiqlandi'
         const confirmedSales = allSales.filter(s => s.status === 'tasdiqlandi');
 
-        // 2. Group by Month and then by Operator
+        // 2. Extract all unique operators early
+        const uniqueOperators = Array.from(new Set(
+            confirmedSales.map(s => s.operator).filter(Boolean)
+        )).sort();
+
+        // 3. Group by Month and then by Operator
         // We'll structure it like:
         // { '2026-Yanvar': { total: 10, 'Dilnavoz': 5, 'Nodira': 5 }, ... }
         const monthlyData: Record<string, { monthDate: Date, total: number, operators: Record<string, number> }> = {};
+
+        // Ensure current month always exists
+        const today = new Date();
+        const currentYear = today.getFullYear();
+        const currentMonth = today.getMonth();
+        const currentMonthKey = `${currentYear}-${currentMonth.toString().padStart(2, '0')}`;
+        
+        monthlyData[currentMonthKey] = {
+            monthDate: new Date(currentYear, currentMonth, 1),
+            total: 0,
+            operators: {}
+        };
 
         confirmedSales.forEach(sale => {
             if (!sale.salesDate) return;
@@ -56,19 +73,19 @@ export async function GET() {
             const data = monthlyData[key];
             const monthName = MONTH_NAMES[data.monthDate.getMonth()];
 
+            const opStats: Record<string, number> = {};
+            uniqueOperators.forEach(op => {
+               opStats[op] = data.operators[op] || 0;
+            });
+
             // Format to return cleanly: { month: "Yanvar", total: 10, "Dilnavoz": 5, ... }
             return {
                 month: monthName,
                 fullYearMonth: `${monthName} ${data.monthDate.getFullYear()}`,
                 total: data.total,
-                ...data.operators
+                ...opStats
             };
         });
-
-        // 4. Extract all unique operators that have at least one approved sale in history
-        const uniqueOperators = Array.from(new Set(
-            confirmedSales.map(s => s.operator).filter(Boolean)
-        )).sort();
 
         return NextResponse.json({
             trends: chartData,

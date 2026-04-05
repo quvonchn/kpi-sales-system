@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
 
             return {
                 name: op.name,
-                email: op.email,
+                id: op.id,
                 salesCount: opSales.length,
                 totalRevenue,
                 commissionRate: commission.commissionRate,

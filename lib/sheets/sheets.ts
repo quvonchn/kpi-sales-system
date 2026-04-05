@@ -14,6 +14,15 @@ export interface SheetSale {
     time: string;
 }
 
+export interface SheetPrize {
+    id: string;
+    name: string;
+    priceUzs: number;
+    imageUrl: string;
+    source: string;
+    estimatedSalesNeeded?: number;
+}
+
 export function normalizeDateStr(dateStr: string): string {
     if (!dateStr) return '';
     const dateOnly = dateStr.toString().trim().split(' ')[0];
@@ -66,7 +75,7 @@ export async function getTodaySalesFromSheets(operatorName?: string): Promise<Sh
         // Columns: A=ID, B=Operator, C=Sales Date, D=Commission, E=Quruvchi, F=Obyekt, G=Status
         const response = await sheets.spreadsheets.values.get({
             spreadsheetId: process.env.GOOGLE_SHEET_ID,
-            range: 'Лист1!A2:G',
+            range: "'sales history'!A2:G",
         });
 
         const rows = response.data.values || [];
@@ -161,7 +170,7 @@ export async function getSalesByMonth(
 
         const response = await sheets.spreadsheets.values.get({
             spreadsheetId: process.env.GOOGLE_SHEET_ID,
-            range: 'Лист1!A2:G',
+            range: "'sales history'!A2:G",
         });
 
         const rows = response.data.values || [];
@@ -242,7 +251,7 @@ export async function getSalesByDateRange(
 
         const response = await sheets.spreadsheets.values.get({
             spreadsheetId: process.env.GOOGLE_SHEET_ID,
-            range: 'Лист1!A2:G',
+            range: "'sales history'!A2:G",
         });
 
         const rows = response.data.values || [];
@@ -298,6 +307,45 @@ export async function getSalesByDateRange(
 
     } catch (error) {
         console.error("Google Sheets API Error in getSalesByDateRange:", error);
+        return [];
+    }
+}
+
+export async function getCatalogPrizesFromSheets(): Promise<SheetPrize[]> {
+    if (!process.env.GOOGLE_SHEETS_CREDENTIALS || !process.env.GOOGLE_SHEET_ID) {
+        return [];
+    }
+
+    try {
+        const credentials = JSON.parse(process.env.GOOGLE_SHEETS_CREDENTIALS);
+        const auth = new google.auth.GoogleAuth({
+            credentials,
+            scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
+        });
+        const sheets = google.sheets({ version: 'v4', auth });
+
+        // Assuming a sheet named 'Katalog' with columns: A=ID, B=Name, C=Price, D=ImageURL, E=Source, F=EstimatedSales
+        const response = await sheets.spreadsheets.values.get({
+            spreadsheetId: process.env.GOOGLE_SHEET_ID,
+            range: 'Katalog!A2:F',
+        });
+
+        const rows = response.data.values || [];
+
+        const prizes: SheetPrize[] = rows.map((row, index) => {
+            return {
+                id: (row[0] || `cat_${index}`).toString(),
+                name: (row[1] || 'Nomsiz tovar').toString(),
+                priceUzs: parseFloat(row[2]?.toString().replace(/[^0-9.-]/g, '') || '0'),
+                imageUrl: (row[3] || '').toString(),
+                source: (row[4] || 'Admin').toString(),
+                estimatedSalesNeeded: parseInt(row[5]?.toString() || '0', 10) || undefined,
+            };
+        });
+
+        return prizes;
+    } catch (error) {
+        console.error("Google Sheets API Error in getCatalogPrizesFromSheets:", error);
         return [];
     }
 }

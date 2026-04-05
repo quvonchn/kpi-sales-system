@@ -6,6 +6,7 @@ export interface Operator {
     password: string;
     email?: string;
     role?: 'admin' | 'operator';
+    selectedGoal?: string; // JSON string
 }
 
 export async function getOperators(): Promise<Operator[]> {
@@ -24,24 +25,24 @@ export async function getOperators(): Promise<Operator[]> {
 
         const sheets = google.sheets({ version: 'v4', auth });
 
-        // Read from "Лист2" sheet (User's sheet for operators)
-        // Columns: A=Name, B=Password, C=Email, D=Role
+        // Read from "login: parols" sheet (User's sheet for operators)
+        // Columns: A=Name, B=Password, C=Email, D=Role, E=SelectedGoal
         const response = await sheets.spreadsheets.values.get({
             spreadsheetId: process.env.GOOGLE_SHEET_ID,
-            range: 'Лист2!A2:D', // Assuming row 1 is headers
+            range: "'login: parols'!A2:E", // Assuming row 1 is headers
         });
 
         const rows = response.data.values || [];
 
         const operators: Operator[] = rows.map((row) => {
             const name = (row[0] || '').toString().trim();
-            const role = (row[3] || 'operator').toString().trim().toLowerCase();
+            const role = (row[2] || 'operator').toString().trim().toLowerCase(); // Column C
             
             return {
                 name,
                 password: (row[1] || '').toString().trim(),
-                email: (row[2] || '').toString().trim(),
                 role: (name.toLowerCase() === 'admin' ? 'admin' : role) as 'admin' | 'operator',
+                selectedGoal: (row[3] || '').toString().trim(), // Column D
             };
         });
 
@@ -61,6 +62,8 @@ export async function validateOperator(name: string, password: string): Promise<
 
     const operator = operators.find(op => op.name.toLowerCase() === targetName);
     
+    console.log(`[DEBUG] Attempting login. targetName: "${targetName}", foundOp:`, operator?.name, 'targetPass:', targetPassword, 'opPass:', operator?.password);
+
     if (!operator) return null;
 
     // Check if the password is a hash (starts with $2a$ or $2b$)
@@ -98,7 +101,7 @@ export async function updateOperatorPassword(name: string, newPassword: string):
         // 1. Find the row index for the operator
         const response = await sheets.spreadsheets.values.get({
             spreadsheetId: process.env.GOOGLE_SHEET_ID,
-            range: 'Лист2!A1:A', // Read only column A
+            range: "'login: parols'!A1:A", // Read only column A
         });
 
         const rows = response.data.values || [];
@@ -112,7 +115,7 @@ export async function updateOperatorPassword(name: string, newPassword: string):
         }
 
         // 2. Update the password cell (Column B = index 1)
-        const range = `Лист2!B${rowIndex + 1}`;
+        const range = `'login: parols'!B${rowIndex + 1}`;
 
         await sheets.spreadsheets.values.update({
             spreadsheetId: process.env.GOOGLE_SHEET_ID,
@@ -126,6 +129,54 @@ export async function updateOperatorPassword(name: string, newPassword: string):
         return true;
     } catch (error) {
         console.error("Error updating operator password:", error);
+        return false;
+    }
+}
+
+export async function updateOperatorGoal(name: string, goalData: string): Promise<boolean> {
+    if (!process.env.GOOGLE_SHEETS_CREDENTIALS || !process.env.GOOGLE_SHEET_ID) {
+        return false;
+    }
+
+    try {
+        const credentials = JSON.parse(process.env.GOOGLE_SHEETS_CREDENTIALS);
+        const auth = new google.auth.GoogleAuth({
+            credentials,
+            scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+        });
+        const sheets = google.sheets({ version: 'v4', auth });
+
+        // 1. Find the row index for the operator
+        const response = await sheets.spreadsheets.values.get({
+            spreadsheetId: process.env.GOOGLE_SHEET_ID,
+            range: "'login: parols'!A1:A", // Read only column A
+        });
+
+        const rows = response.data.values || [];
+        const rowIndex = rows.findIndex(row =>
+            row[0]?.toString().toLowerCase().trim() === name.toLowerCase().trim()
+        );
+
+        if (rowIndex === -1) {
+            console.error(`Operator ${name} not found in sheet`);
+            return false;
+        }
+
+        // 2. Update the goal cell (Column D = index 3)
+        const range = `'login: parols'!D${rowIndex + 1}`;
+
+        await sheets.spreadsheets.values.update({
+            spreadsheetId: process.env.GOOGLE_SHEET_ID,
+            range,
+            valueInputOption: 'RAW',
+            requestBody: {
+                values: [[goalData]],
+            },
+        });
+
+        return true;
+    } catch (error) {
+        console.error("Error updating operator goal:", error);
         return false;
     }
 }

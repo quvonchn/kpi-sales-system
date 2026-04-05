@@ -9,7 +9,8 @@ import RecentSales from '@/components/Dashboard/RecentSales';
 import AuthGuard from '@/components/Auth/AuthGuard';
 import UpsellCard from '@/components/Motivational/UpsellCard';
 import DeveloperPieChart from '@/components/Dashboard/DeveloperPieChart';
-
+import BannerCarousel, { PrizeGoal } from '@/components/Motivational/BannerCarousel';
+import PersonalGoalCard from '@/components/Motivational/PersonalGoalCard';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -31,6 +32,8 @@ export default function Home() {
   const [salesData, setSalesData] = useState<Sale[]>([]);
   const [loading, setLoading] = useState(true);
   const [isUsingMock, setIsUsingMock] = useState(false);
+  const [personalGoal, setPersonalGoal] = useState<PrizeGoal | null>(null);
+  const [isEditingGoal, setIsEditingGoal] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -50,16 +53,23 @@ export default function Home() {
           throw new Error(data.error);
         }
 
-        // If data.sales exists (even if empty), use real data
         if (Array.isArray(data.sales)) {
           setSalesData(data.sales);
           setIsUsingMock(false);
         } else {
           setIsUsingMock(true);
         }
+        
+        // Fetch personal goal
+        const goalResponse = await fetch('/api/goals');
+        const goalData = await goalResponse.json();
+        if (goalData.goal) {
+          setPersonalGoal(goalData.goal);
+        }
+
       } catch (error) {
-        console.error('Error fetching sales:', error);
-        setIsUsingMock(true); // Only use mock if there's an actual error
+        console.error('Error fetching data:', error);
+        setIsUsingMock(true);
       } finally {
         setLoading(false);
       }
@@ -115,6 +125,29 @@ export default function Home() {
           )}
 
           <div className={`animate-fade-in ${styles.dashboardGrid}`}>
+            {(!personalGoal || isEditingGoal) ? (
+              <BannerCarousel 
+                onGoalSet={(goal) => {
+                  const currentEdits = personalGoal ? (personalGoal as any).editCount ?? 3 : (goal as any).editCount ?? 3;
+                  const newGoal = { ...goal, editCount: Math.max(0, currentEdits - (isEditingGoal ? 1 : 0)) } as PrizeGoal;
+                  
+                  setPersonalGoal(newGoal);
+                  setIsEditingGoal(false);
+                  fetch('/api/goals', { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ goalData: newGoal }) 
+                  }).catch(console.error);
+                }} 
+              />
+            ) : (
+              <PersonalGoalCard 
+                goal={personalGoal} 
+                currentKpiAmount={commissionData.commissionAmount}
+                remainingEdits={(personalGoal as any).editCount ?? 3}
+                onEditClick={() => setIsEditingGoal(true)}
+              />
+            )}
             <div className={styles.statsRow}>
               <StatsCard
                 title="Shu Oy Sotuvlar"

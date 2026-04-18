@@ -11,6 +11,8 @@ import UpsellCard from '@/components/Motivational/UpsellCard';
 import DeveloperPieChart from '@/components/Dashboard/DeveloperPieChart';
 import BannerCarousel, { PrizeGoal } from '@/components/Motivational/BannerCarousel';
 import PersonalGoalCard from '@/components/Motivational/PersonalGoalCard';
+import TopPerformers from '@/components/Dashboard/TopPerformers';
+import Achievements from '@/components/Dashboard/Achievements';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -54,7 +56,10 @@ export default function Home() {
         }
 
         if (Array.isArray(data.sales)) {
-          setSalesData(data.sales);
+          const sortedSales = [...data.sales].sort((a, b) => {
+            return new Date(b.time).getTime() - new Date(a.time).getTime();
+          });
+          setSalesData(sortedSales);
           setIsUsingMock(false);
         } else {
           setIsUsingMock(true);
@@ -196,7 +201,14 @@ export default function Home() {
                 showBuilderInstead={false}
                 showKPI={true}
               />
-              <DeveloperPieChart sales={salesData} />
+              <div className={styles.sideWidgets}>
+                <TopPerformers />
+                <Achievements 
+                   salesCount={currentSalesCount} 
+                   totalRevenue={currentTotalRevenue} 
+                />
+                <DeveloperPieChart sales={salesData} />
+              </div>
             </section>
           </div>
         </main>

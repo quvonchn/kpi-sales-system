@@ -69,7 +69,10 @@ export default function HistoryPage() {
                     const response = await fetch(`/api/admin/sales/filter?${params.toString()}`);
                     const data = await response.json();
 
-                    setSales(data.sales || []);
+                    const sortedSales = (data.sales || []).sort((a: any, b: any) => {
+                        return new Date(b.time).getTime() - new Date(a.time).getTime();
+                    });
+                    setSales(sortedSales);
                     if (data.metadata) {
                         setAvailableOperators(data.metadata.uniqueOperators || []);
                         setAvailableBuilders(data.metadata.uniqueBuilders || []);
@@ -80,7 +83,10 @@ export default function HistoryPage() {
                         `/api/sales/history?operator=${operator}&month=${selectedMonth}&year=${selectedYear}`
                     );
                     const data = await response.json();
-                    setSales(data.sales || []);
+                    const sortedSales = (data.sales || []).sort((a: any, b: any) => {
+                        return new Date(b.time).getTime() - new Date(a.time).getTime();
+                    });
+                    setSales(sortedSales);
                 }
             } catch (e) {
                 console.error(e);

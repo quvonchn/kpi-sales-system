@@ -56,9 +56,7 @@ export default function Home() {
         }
 
         if (Array.isArray(data.sales)) {
-          const sortedSales = [...data.sales].sort((a, b) => {
-            return new Date(b.time).getTime() - new Date(a.time).getTime();
-          });
+          const sortedSales = (data.sales || []).sort((a: any, b: any) => b.time.localeCompare(a.time));
           setSalesData(sortedSales);
           setIsUsingMock(false);
         } else {

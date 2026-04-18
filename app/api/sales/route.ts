@@ -12,6 +12,9 @@ export async function GET(request: NextRequest) {
 
         const sales = await getTodaySalesFromSheets(operator);
 
+        // Sort by date descending (newest first)
+        sales.sort((a, b) => b.time.localeCompare(a.time));
+
         return NextResponse.json({ sales });
     } catch (error) {
         console.error('Sales API error:', error);

@@ -30,6 +30,9 @@ export async function GET(request: Request) {
             sales = sales.filter(s => s.quruvchi.toLowerCase().trim() === selectedBuilder);
         }
 
+        // 5. Sort sales by date descending (newest first)
+        sales.sort((a, b) => b.time.localeCompare(a.time));
+
         return NextResponse.json({
             sales,
             metadata: {

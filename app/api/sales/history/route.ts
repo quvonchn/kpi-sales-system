@@ -20,6 +20,9 @@ export async function GET(request: NextRequest) {
 
         const sales = await getSalesByMonth(targetOperator, month, year);
 
+        // Sort by date descending (newest first)
+        sales.sort((a, b) => b.time.localeCompare(a.time));
+
         return NextResponse.json({ sales });
     } catch (error) {
         console.error('Sales History API error:', error);
